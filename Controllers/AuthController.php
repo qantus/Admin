@@ -50,13 +50,13 @@ class AuthController extends CoreController
             $form->setAttributes($_POST);
 
             if ($form->isValid() && $form->login()) {
-                if (Mindy::app()->request->isAjaxRequest) {
+                if ($this->r->isAjax) {
                     $this->json(array(
                         'status' => 'success',
                         'title' => UserModule::t('You have successfully logged in to the site')
                     ));
                 } else {
-                    $this->redirect('admin.index');
+                    $this->r->redirect('admin.index');
                 }
             }
         }
@@ -65,7 +65,7 @@ class AuthController extends CoreController
             'form' => $form
         ];
 
-        if (Mindy::app()->request->isAjaxRequest) {
+        if ($this->r->isAjax) {
             $this->json([
                 'content' => $this->render('admin/_login.html', $data)
             ]);
@@ -81,10 +81,10 @@ class AuthController extends CoreController
     {
         $auth = Mindy::app()->auth;
         if ($auth->isGuest) {
-            $this->redirect(Mindy::app()->homeUrl);
+            $this->r->redirect(Mindy::app()->homeUrl);
         }
 
         $auth->logout();
-        $this->redirect('admin.login');
+        $this->r->redirect('admin.login');
     }
 }

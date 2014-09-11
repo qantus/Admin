@@ -1,4 +1,4 @@
-{% extends request.isAjaxRequest ? 'ajax.html' : 'admin/base_login.html' %}
+{% extends request.isAjax ? 'ajax.html' : 'admin/base_login.html' %}
 
 {% block breadcrumbs %}
     {% set breadcrumbs = [['name' => t('Login', 'user')]] %}

@@ -3,7 +3,6 @@
 namespace Modules\Admin\Controllers;
 
 use Mindy\Base\Mindy;
-use Mindy\Helper\File;
 use Mindy\Pagination\Pagination;
 use Modules\Core\Components\UserLog;
 use Modules\Core\Controllers\BackendController;
@@ -39,12 +38,11 @@ class AdminController extends BackendController
         }
 
         $admin = new $className;
-
         if (is_string($admin->getModel()) && class_exists($admin->getModel()) === false) {
             $this->error(404);
         }
 
-        if (Mindy::app()->request->isPostRequest && isset($_POST['action']) && !empty($_POST['action'])) {
+        if ($this->r->http->isPostRequest && $this->r->post->get('action')) {
             $action = $_POST['action'];
             unset($_POST['action']);
             $admin->$action($_POST);
@@ -64,27 +62,16 @@ class AdminController extends BackendController
             'admin' => $admin,
         ], $context));
 
-        // TODO uselles?
-        $breadcrumbs = array_merge([
-            [
-                'url' => Mindy::app()->urlManager->reverse('admin.list', ['module' => $moduleName, 'adminClass' => get_class($this)]),
-                'name' => get_class($this),
-                'items' => $this->formatBreadcrumbs($this->getApplications(), $admin)
-            ]
-        ], $context['breadcrumbs']);
-
-        if (Mindy::app()->request->isAjaxRequest) {
+        if ($this->r->isAjax) {
             echo $out;
-            Mindy::app()->end();
         } else {
-            $out = $this->render('admin/admin/list.html', array_merge(['adminClass' => $adminClass], [
+            echo $this->render('admin/admin/list.html', array_merge(['adminClass' => $adminClass], [
                 'module' => $admin->getModule(),
                 'modelClass' => $admin->getModel(),
                 'out' => $out,
                 'breadcrumbs' => $context['breadcrumbs'],
                 'admin' => $admin
             ]));
-            echo $out;
         }
     }
 
@@ -162,11 +149,5 @@ class AdminController extends BackendController
     {
         $code = $module . '.admin.' . strtolower($adminClass) . '.' . $actionId;
         return Mindy::app()->user->can($code, $params);
-    }
-
-    public function render($view, array $data = [])
-    {
-        $data['apps'] = $this->getApplications();
-        return parent::render($view, $data);
     }
 }
