@@ -399,7 +399,11 @@ abstract class ModelAdmin
         }
     }
 
-    public function search(QuerySet $qs)
+    /**
+     * @param \Mindy\Orm\QuerySet|\Mindy\Orm\Manager $qs
+     * @return mixed
+     */
+    public function search($qs)
     {
         $fields = $this->getSearchFields();
         if (isset($this->params['search']) && !empty($fields)) {
