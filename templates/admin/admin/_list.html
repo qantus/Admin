@@ -1,0 +1,40 @@
+<form action="" method="post">
+    {% csrf_token %}
+    {% include 'admin/admin/_toolbar.html' %}
+
+    <section id="list" data-path="{{ request.getPath() }}">
+        <table id="table-main" data-toggle="checkboxes" data-range="true">
+            {% include "admin/admin/_table_head.html" %}
+            <tbody>
+            {% for model in models %}
+                <tr data-pk="{{ model.pk }}">
+                    <td class="check" align="left">
+                        <input type="checkbox" name="models[]" id="check-{{ model.pk }}" value="{{ model.pk }}" />
+                        <label class="checkbox-state" for="check-{{ model.pk }}"></label>
+                    </td>
+                    {% if sortingColumn %}
+                        <td class="sorting"><i class="icon-menu"></i></td>
+                    {% endif %}
+                    {% for column in columns %}
+                        <td{% if loop.first %} class="td-id" align="left"{% endif %}>
+                            {% if loop.first %}
+                                <a href="{% url 'admin.update' moduleName adminClass model.pk %}">
+                                    {{ admin.getColumnValue(column, model) }}
+                                </a>
+                            {% else %}
+                                {{ admin.getColumnValue(column, model) }}
+                            {% endif %}
+                        </td>
+                    {% endfor %}
+                    <td class="actions">
+                        {% include 'admin/admin/_actions.html' %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+
+        {{ pager.render("admin/admin/_pager.html")|raw }}
+    </section>
+</form>
+{% include "admin/admin/_sorting.html" %}

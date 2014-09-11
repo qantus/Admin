@@ -1,0 +1,19 @@
+{% for item in apps %}
+    <li>
+        <span><i class="{% if item.icon %}{{ item.icon }}{% else %}icon-framelist{% endif %}"></i> {{ item.name }}</span>
+        {% if item.items %}
+            <ul>
+                {% for child in item.items %}
+                    <li>
+                        <a href="{% if child.url %}{% url child.url item.module child.adminClass %}{% else %}{% url 'admin.list' item.module child.adminClass %}{% endif %}">
+                            {{ child.name }}
+                        </a>
+                    </li>
+                {% endfor %}
+            </ul>
+        {% endif %}
+    </li>
+    <li>
+        <span class="divider"></span>
+    </li>
+{% endfor %}

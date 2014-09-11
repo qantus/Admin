@@ -1,0 +1,80 @@
+<!doctype html>
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Foundation</title>
+    {#<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet'#}
+          {#type='text/css'>#}
+    <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
+    <script src="/static_admin/dist/js/1.0.0.all.js"></script>
+</head>
+<body>
+{{ debug_panel() }}
+<section id="wrapper">
+    <section id="base">
+        <section id="base-line">
+            <aside id="sidebar">
+                <header id="header">
+                    <nav class="manage right">
+                        <a href="/" target="_blank" rel="tooltip" title="{{ t('Open site', 'admin') }}">
+                            <i class="icon-link"></i>
+                        </a>
+                        <a href="{% url 'admin.settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
+                            <i class="icon-settings"></i>
+                        </a>
+                        <a href="{% url 'admin.logout' %}" rel="tooltip" title="{{ t('Logout', 'user') }}">
+                            <i class="icon-logout"></i>
+                        </a>
+                    </nav>
+
+                    <h1 id="logo"><i class="icon-mindy"></i> {{ get_version }}</h1>
+                </header>
+
+                <nav id="sidebar-menu">
+                    {% include 'admin/menu.html' %}
+                </nav>
+            </aside>
+
+            <section id="main">
+                <section id="content" class="{% block content_class %}{% endblock %}">
+                    {% block breadcrumbs %}
+                        {% include "admin/breadcrumbs.html" %}
+                    {% endblock %}
+
+                    <section class="heading">
+                        {% block heading %}{% endblock %}
+                    </section>
+
+                    {% block flash %}
+                        {% include "admin/flash.html" %}
+                    {% endblock %}
+
+                    {% for message in flash %}
+                        <div data-alert class="alert-box">
+                            {{ message }}
+                            <a href="#" class="close">&times;</a>
+                        </div>
+                    {% endfor %}
+
+                    <section class="content-wrap">
+                        {% block content %}{% endblock %}
+                    </section>
+                </section>
+
+                <footer id="footer" class="small-12 columns">
+                    &copy; Studio107
+                </footer>
+            </section>
+
+            <section id="last-column">
+                <section class="last-columns-content">
+                    {% include "admin/_user_actions.html" %}
+                </section>
+            </section>
+        </section>
+    </section>
+
+</section>
+</body>
+</html>

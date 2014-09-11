@@ -1,0 +1,17 @@
+{% if 'update' in admin.actionsList %}
+    <a href="{% url 'admin.update' moduleName adminClass model.pk %}">
+        <i class="icon-edit"></i>
+    </a>
+{% endif %}
+
+{% if 'view' in admin.actionsList and method_exists(model, "getAbsoluteUrl") %}
+    <a href="{{ model.getAbsoluteUrl() }}" target="_blank">
+        <i class="icon-search"></i>
+    </a>
+{% endif %}
+
+{% if 'delete' in admin.actionsList %}
+    <a class="action-delete" data-confirm="Вы действительно хотите удалить?" href="{% url 'admin.delete' moduleName adminClass model.pk %}">
+        <i class="icon-x"></i>
+    </a>
+{% endif %}

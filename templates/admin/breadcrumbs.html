@@ -1,0 +1,30 @@
+<nav id="breadcrumbs">
+    <li>
+        <a href="{% url 'admin.index' %}">{{ t('Home', 'admin') }}</a>
+    </li>
+    {% if breadcrumbs|length > 0 %}
+        <li>/</li>
+    {% endif %}
+    {% for bc in breadcrumbs %}
+        {% if not loop.first %}
+            <li>/</li>
+        {% endif %}
+        <li>
+            {% if loop.last %}
+                {{ bc.name }}
+            {% else %}
+                <a href="{{ bc.url }}">{{ bc.name }}</a>
+            {% endif %}
+
+            {% if bc.items|length > 1 %}
+                <nav class="children">
+                {% for item in bc.items %}
+                    <li>
+                        <a href="{% url item.url %}">{{ item.name }}</a>
+                    </li>
+                {% endfor %}
+                </nav>
+            {% endif %}
+        </li>
+    {% endfor %}
+</nav>

@@ -1,0 +1,29 @@
+<div class="toolbar-holder">
+    <section class="toolbar sticky">
+        <a class="button search" href="#">
+            <i class="icon-search"></i>
+        </a>
+
+        <div class="search-toolbar">
+            <i class="icon-search"></i>
+            <input type="text" name="search" placeholder="{{ t('Search','admin') }}..."/>
+            <a class="exit-search" href="#"><i class="icon-x"></i></a>
+        </div>
+
+        <a href="{% url 'admin.create' moduleName adminClass %}" class="create button sub-button-left custom-button">
+            <span class="sub-button">
+                <i class="icon-plus"></i>
+            </span>
+            {{ t('Create', 'admin') }}
+        </a>
+
+        <select name="action" id="actions" class="actions">
+            <option value="" disabled="disabled" selected="selected">{{ t('Choose action', 'admin') }}</option>
+            {% for key, value in actions %}
+                <option value="{{ key }}">{{ value }}</option>
+            {% endfor %}
+        </select>
+
+        <button type="submit" class="submit-actions button custom-button">{{ t('Submit', 'admin') }}</button>
+    </section>
+</div>

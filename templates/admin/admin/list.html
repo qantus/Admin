@@ -1,0 +1,11 @@
+{% extends 'admin/base.html' %}
+
+{% block content_class %}list{% endblock %}
+
+{% block heading %}
+    <h1>{{ admin.getVerboseNameList() }}</h1>
+{% endblock %}
+
+{% block content %}
+    {{ out|raw }}
+{% endblock %}

@@ -1,0 +1,7 @@
+{% if app.flash.count() > 0 %}
+<ul class="flash-list">
+    {% for key, value in app.flash.all() %}
+        <li class="{{ key }}"><span class="close right" rel="tooltip" title="Закрыть">&times;</span>{{ value }}</li>
+    {% endfor %}
+</ul>
+{% endif %}
