@@ -20,7 +20,7 @@
                         <a href="/" target="_blank" rel="tooltip" title="{{ t('Open site', 'admin') }}">
                             <i class="icon-link"></i>
                         </a>
-                        <a href="{% url 'admin.settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
+                        <a href="{% url 'core.settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
                             <i class="icon-settings"></i>
                         </a>
                         <a href="{% url 'admin.logout' %}" rel="tooltip" title="{{ t('Logout', 'user') }}">
@@ -39,7 +39,7 @@
             <section id="main">
                 <section id="content" class="{% block content_class %}{% endblock %}">
                     {% block breadcrumbs %}
-                        {% include "admin/breadcrumbs.html" %}
+                        {% include "admin/_breadcrumbs.html" %}
                     {% endblock %}
 
                     <section class="heading">
@@ -47,7 +47,7 @@
                     </section>
 
                     {% block flash %}
-                        {% include "admin/flash.html" %}
+                        {% include "admin/_flash.html" %}
                     {% endblock %}
 
                     {% for message in flash %}

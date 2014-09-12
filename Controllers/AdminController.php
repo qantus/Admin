@@ -62,6 +62,8 @@ class AdminController extends BackendController
             'admin' => $admin,
         ], $context));
 
+        $this->setBreadcrumbs($context['breadcrumbs']);
+
         if ($this->r->isAjax) {
             echo $out;
         } else {
@@ -69,7 +71,6 @@ class AdminController extends BackendController
                 'module' => $admin->getModule(),
                 'modelClass' => $admin->getModel(),
                 'out' => $out,
-                'breadcrumbs' => $context['breadcrumbs'],
                 'admin' => $admin
             ]));
         }

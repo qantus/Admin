@@ -2,10 +2,10 @@
     <li>
         <a href="{% url 'admin.index' %}">{{ t('Home', 'admin') }}</a>
     </li>
-    {% if breadcrumbs|length > 0 %}
+    {% if this.breadcrumbs|length > 0 %}
         <li>/</li>
     {% endif %}
-    {% for bc in breadcrumbs %}
+    {% for bc in this.breadcrumbs %}
         {% if not loop.first %}
             <li>/</li>
         {% endif %}

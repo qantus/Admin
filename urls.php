@@ -37,8 +37,4 @@ return [
         'name' => 'delete',
         'callback' => '\Modules\Admin\Controllers\AdminController:delete'
     ],
-    '/settings' => [
-        'name' => 'settings',
-        'callback' => '\Modules\Admin\Controllers\AdminController:settings'
-    ],
 ];
