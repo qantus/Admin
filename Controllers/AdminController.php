@@ -111,6 +111,15 @@ class AdminController extends BackendController
 
         $admin = new $className();
         $context = $admin->create($_POST, $_FILES);
+        $this->setBreadcrumbs(array_merge([
+            [
+                'name' => $admin->getVerboseName(),
+                'url' => Mindy::app()->urlManager->reverse('admin.list', [
+                        'adminClass' => $adminClass,
+                        'module' => $module
+                    ])
+            ]
+        ], $context['breadcrumbs']));
         echo $this->render('admin/admin/create.html', array_merge(['module' => $module, 'adminClass' => $adminClass], $context));
     }
 
@@ -127,6 +136,15 @@ class AdminController extends BackendController
 
         $admin = new $className();
         $context = $admin->update($id, $_POST, $_FILES);
+        $this->setBreadcrumbs(array_merge([
+            [
+                'name' => $admin->getVerboseName(),
+                'url' => Mindy::app()->urlManager->reverse('admin.list', [
+                        'adminClass' => $adminClass,
+                        'module' => $module
+                    ])
+            ]
+        ], $context['breadcrumbs']));
         echo $this->render('admin/admin/update.html', array_merge(['module' => $module, 'adminClass' => $adminClass], $context));
     }
 
