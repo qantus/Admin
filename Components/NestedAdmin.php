@@ -103,8 +103,8 @@ abstract class NestedAdmin extends ModelAdmin
         foreach ($parents as $parent) {
             $breadcrumbs[] = [
                 'url' => Mindy::app()->urlManager->reverse('admin.list_nested', [
-                    'adminClass' => $this->classNameShort(),
                     'module' => $model->getModuleName(),
+                    'adminClass' => $this->classNameShort(),
                     'id' => $parent->pk
                 ]),
                 'name' => (string)$parent,

@@ -10,6 +10,7 @@ use Mindy\Form\ModelForm;
 use Mindy\Helper\Text;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
+use Mindy\Orm\Model;
 use Mindy\Orm\QuerySet;
 use Mindy\Pagination\Pagination;
 use Modules\Admin\AdminModule;
@@ -102,12 +103,19 @@ abstract class ModelAdmin
      */
     public function getColumnValue($column, $model)
     {
+        if($column == 'pk') {
+            $column = $model->getPkName();
+        }
         if ($model->hasAttribute($column)) {
             return $model->getAttribute($column);
         } else {
-            $method = 'get' . ucfirst($column);
-            if (method_exists($model, $method)) {
-                return $model->{$method}();
+            if($model->hasField($column)) {
+                return $model->__get($column);
+            } else {
+                $method = 'get' . ucfirst($column);
+                if (method_exists($model, $method)) {
+                    return $model->{$method}();
+                }
             }
         }
         return null;
@@ -134,6 +142,15 @@ abstract class ModelAdmin
     }
 
     /**
+     * @param Model $model
+     * @return QuerySet
+     */
+    public function getQuerySet(Model $model)
+    {
+        return $model->objects()->getQuerySet();
+    }
+
+    /**
      * @return array
      */
     public function index()
@@ -144,7 +161,7 @@ abstract class ModelAdmin
         $model = new $modelClass();
 
         /* @var $qs \Mindy\Orm\QuerySet */
-        $qs = $model->objects()->getQuerySet();
+        $qs = $this->getQuerySet($model);
 
         $this->initBreadcrumbs($model);
 
