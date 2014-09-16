@@ -30,7 +30,7 @@
                     type: 'POST',
                     url: '',
                     success: function(data) {
-                        // $.mnotify(data);
+                        $('#main-form').replaceWith(data);
                     }
                 });
             }

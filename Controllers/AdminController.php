@@ -42,11 +42,10 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
-        if ($this->r->http->isPostRequest && $this->r->post->get('action')) {
+        if ($this->r->http->isPostRequest && isset($_POST['action'])) {
             $action = $_POST['action'];
             unset($_POST['action']);
             $admin->$action($_POST);
-            Mindy::app()->end();
         }
 
         $admin->setParams($_GET);

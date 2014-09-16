@@ -41,12 +41,12 @@ abstract class NestedAdmin extends ModelAdmin
         /* @var $qs \Mindy\Orm\QuerySet */
         $modelClass = $this->getModel();
         if (array_key_exists('id', $this->params) && $this->params['id']) {
-            $qs = $modelClass::tree()->filter(['pk' => $this->params['id']]);
+            $qs = $modelClass::objects()->filter(['pk' => $this->params['id']]);
             $model = $qs->get();
-            $qs = $model->tree()->children();
+            $qs = $model->objects()->children();
         } else {
             $model = new $modelClass();
-            $qs = $model->tree()->roots();
+            $qs = $model->objects()->roots();
         }
 
         $this->initBreadcrumbs($model);
@@ -162,14 +162,16 @@ abstract class NestedAdmin extends ModelAdmin
                 throw new Exception("Missing required parameter insertAfter or insertBefore");
             }
         }
-
-        if (Mindy::app()->request->getIsAjaxRequest()) {
-            Mindy::app()->controller->json(['success' => true]);
-        } else {
-            $this->redirect('admin.list', [
-                'module' => $this->getModel()->getModuleName(),
-                'adminClass' => $this->classNameShort()
-            ]);
-        }
+//        if (Mindy::app()->request->getIsAjax()) {
+//            echo Mindy::app()->controller->json([
+//                'success' => true,
+//                'html' => $this->index()
+//            ]);
+//        } else {
+//            $this->redirect('admin.list', [
+//                'module' => $this->getModel()->getModuleName(),
+//                'adminClass' => $this->classNameShort()
+//            ]);
+//        }
     }
 }
