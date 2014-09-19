@@ -346,6 +346,7 @@ abstract class ModelAdmin
             $model = $modelClass;
             $modelClass = get_class($model);
         }
+        $this->initBreadcrumbs($model);
 
         $formClass = $this->getCreateForm();
         /* @var $form \Mindy\Form\ModelForm */
