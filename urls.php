@@ -37,4 +37,8 @@ return [
         'name' => 'delete',
         'callback' => '\Modules\Admin\Controllers\AdminController:delete'
     ],
+    '/info/{module:\w+}/{adminClass:\w+}/{id:\d+}' => [
+        'name' => 'info',
+        'callback' => '\Modules\Admin\Controllers\AdminController:info'
+    ],
 ];

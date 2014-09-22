@@ -1,0 +1,11 @@
+{% extends request.isAjax ? "ajax.html" : 'admin/base.html' %}
+
+{% block heading %}
+    <h1>{{ t('Information about', 'admin') }} {{ admin.getVerboseName }}</h1>
+{% endblock %}
+
+{% block content_class %}info{% endblock %}
+
+{% block content %}
+    {{ out|raw }}
+{% endblock %}

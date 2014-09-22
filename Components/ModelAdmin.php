@@ -29,6 +29,15 @@ abstract class ModelAdmin
 
     public $indexTemplate = 'admin/admin/_list.html';
 
+    public $actionsTemplate = 'admin/admin/_actions.html';
+
+    public $infoTemplate = 'admin/admin/_info.html';
+
+    public function getCanCreate()
+    {
+        return true;
+    }
+
     public function getSearchFields()
     {
         return [];
@@ -302,6 +311,25 @@ abstract class ModelAdmin
         ];
     }
 
+    public function info($pk, array $data = [])
+    {
+        $modelClass = $this->getModel();
+        $model = $modelClass::objects()->filter(['pk' => $pk])->get();
+
+        if (!is_string($modelClass)) {
+            $modelClass = get_class($model);
+        }
+        $this->initBreadcrumbs($model);
+
+        return [
+            'admin' => $this,
+            'model' => $model,
+            'modelClass' => $modelClass,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), [
+                ['name' => (string)$model]
+            ])
+        ];
+    }
     public function redirectNext($data, $form)
     {
         list($route, $params) = $this->getNextRoute($data, $form);

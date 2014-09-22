@@ -27,4 +27,5 @@ return array (
   'News' => 'Новости',
   'All news' => 'Все новости',
   'Go' => 'Go',
+  'Number / identifier' => 'Номер / идентификатор'
 );
