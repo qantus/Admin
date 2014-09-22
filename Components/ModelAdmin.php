@@ -287,7 +287,7 @@ abstract class ModelAdmin
         }
 
         if (!empty($data) && $form->isValid() && $form->save()) {
-            Mindy::app()->flash->success(CoreModule::t('Changes saved'));
+            Mindy::app()->request->flash->success(CoreModule::t('Changes saved'));
             $this->redirectNext($data, $form);
         }
 
@@ -369,7 +369,7 @@ abstract class ModelAdmin
         }
 
         if (!empty($data) && $form->isValid() && $form->save()) {
-            Mindy::app()->flash->success(CoreModule::t('Changes saved'));
+            Mindy::app()->request->flash->success(CoreModule::t('Changes saved'));
             $this->redirectNext($data, $form);
         }
 

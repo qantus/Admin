@@ -14,10 +14,9 @@
 
 namespace Modules\Admin\Controllers;
 
-
 use Mindy\Base\Mindy;
 use Modules\Core\Controllers\CoreController;
-use Modules\User\Forms\UserLoginForm;
+use Modules\User\Forms\LoginForm;
 use Modules\User\UserModule;
 
 class AuthController extends CoreController
@@ -44,20 +43,15 @@ class AuthController extends CoreController
 
     public function actionLogin()
     {
-        $form = new UserLoginForm();
-
-        if (!empty($_POST)) {
-            $form->setAttributes($_POST);
-
-            if ($form->isValid() && $form->login()) {
-                if ($this->r->isAjax) {
-                    $this->json(array(
-                        'status' => 'success',
-                        'title' => UserModule::t('You have successfully logged in to the site')
-                    ));
-                } else {
-                    $this->r->redirect('admin.index');
-                }
+        $form = new LoginForm();
+        if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->login()) {
+            if ($this->r->isAjax) {
+                echo $this->json(array(
+                    'status' => 'success',
+                    'title' => UserModule::t('You have successfully logged in to the site')
+                ));
+            } else {
+                $this->r->redirect('admin.index');
             }
         }
 
@@ -66,7 +60,7 @@ class AuthController extends CoreController
         ];
 
         if ($this->r->isAjax) {
-            $this->json([
+            echo $this->json([
                 'content' => $this->render('admin/_login.html', $data)
             ]);
         } else {
