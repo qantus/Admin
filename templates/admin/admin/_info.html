@@ -1,0 +1,27 @@
+<section class="model-info">
+    {% for name, field in model.getFieldsInit() %}
+        <section class="row">
+            <section class="field">
+                <section class="column large-3 field-label">
+                    {% if field.verboseName  %}
+                        {{ field.verboseName }}
+                    {% else %}
+                        {% if name == 'id' %}
+                            {{ t('Number / identifier', 'admin') }}
+                        {% else %}
+                            {{ name|capitalize }}
+                        {% endif %}
+                    {% endif %}
+                </section>
+                <section class="column large-9 field-value">
+                    {# @TODO: Fix me please #}
+                    {% if field.className == 'Mindy\\Orm\\Fields\\DateTimeField' %}
+                        {{ model.getField(name).getValue()|humanizeDateTime }}
+                    {% else %}
+                        {{ model.getField(name).getValue() }}
+                    {% endif %}
+                </section>
+            </section>
+        </section>
+    {% endfor %}
+</section>

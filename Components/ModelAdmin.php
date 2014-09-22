@@ -29,6 +29,15 @@ abstract class ModelAdmin
 
     public $indexTemplate = 'admin/admin/_list.html';
 
+    public $actionsTemplate = 'admin/admin/_actions.html';
+
+    public $infoTemplate = 'admin/admin/_info.html';
+
+    public function getCanCreate()
+    {
+        return true;
+    }
+
     public function getSearchFields()
     {
         return [];
@@ -302,6 +311,25 @@ abstract class ModelAdmin
         ];
     }
 
+    public function info($pk, array $data = [])
+    {
+        $modelClass = $this->getModel();
+        $model = $modelClass::objects()->filter(['pk' => $pk])->get();
+
+        if (!is_string($modelClass)) {
+            $modelClass = get_class($model);
+        }
+        $this->initBreadcrumbs($model);
+
+        return [
+            'admin' => $this,
+            'model' => $model,
+            'modelClass' => $modelClass,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), [
+                ['name' => (string)$model]
+            ])
+        ];
+    }
     public function redirectNext($data, $form)
     {
         list($route, $params) = $this->getNextRoute($data, $form);
@@ -448,16 +476,20 @@ abstract class ModelAdmin
 
     public function getNames()
     {
-        return ['object', 'objects', 'objects'];
+        $model = $this->getModel();
+        $className = strtolower($model::classNameShort());
+        return [$className, $className . 's', $className . 's'];
     }
 
     public function getVerboseName()
     {
-        return isset($this->names[0]) ? $this->names[0] : 'object';
+        $model = $this->getModel();
+        return isset($this->names[0]) ? $this->names[0] : strtolower($model::classNameShort());
     }
 
     public function getVerboseNamePlural()
     {
-        return isset($this->names[1]) ? $this->names[1] : 'object';
+        $model = $this->getModel();
+        return isset($this->names[1]) ? $this->names[1] : strtolower($model::classNameShort()) . 's';
     }
 }

@@ -27,13 +27,12 @@
                         </td>
                     {% endfor %}
                     <td class="actions">
-                        {% include 'admin/admin/_actions.html' %}
+                        {% include admin.actionsTemplate %}
                     </td>
                 </tr>
             {% endfor %}
             </tbody>
         </table>
-
         {{ pager.render("admin/admin/_pager.html")|raw }}
     </section>
 </form>
