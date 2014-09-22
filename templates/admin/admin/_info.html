@@ -13,14 +13,13 @@
                         {% endif %}
                     {% endif %}
                 </section>
-                <section class="column large-9">
-                    <section class="field-value">
-                        {% if field.className == 'Mindy\\Orm\\Fields\\DateTimeField' %}
-                            {{ model.getField(name).getValue()|humanizeDateTime }}
-                        {% else %}
-                            {{ model.getField(name).getValue() }}
-                        {% endif %}
-                    </section>
+                <section class="column large-9 field-value">
+                    {# @TODO: Fix me please #}
+                    {% if field.className == 'Mindy\\Orm\\Fields\\DateTimeField' %}
+                        {{ model.getField(name).getValue()|humanizeDateTime }}
+                    {% else %}
+                        {{ model.getField(name).getValue() }}
+                    {% endif %}
                 </section>
             </section>
         </section>
