@@ -17,7 +17,7 @@ namespace Modules\Admin\Controllers;
 
 use Mindy\Base\Mindy;
 use Modules\Core\Controllers\CoreController;
-use Modules\User\Forms\UserLoginForm;
+use Modules\User\Forms\LoginForm;
 use Modules\User\UserModule;
 
 class AuthController extends CoreController
@@ -44,7 +44,7 @@ class AuthController extends CoreController
 
     public function actionLogin()
     {
-        $form = new UserLoginForm();
+        $form = new LoginForm();
 
         if (!empty($_POST)) {
             $form->setAttributes($_POST);
