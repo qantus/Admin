@@ -448,16 +448,20 @@ abstract class ModelAdmin
 
     public function getNames()
     {
-        return ['object', 'objects', 'objects'];
+        $model = $this->getModel();
+        $className = strtolower($model::classNameShort());
+        return [$className, $className . 's', $className . 's'];
     }
 
     public function getVerboseName()
     {
-        return isset($this->names[0]) ? $this->names[0] : 'object';
+        $model = $this->getModel();
+        return isset($this->names[0]) ? $this->names[0] : strtolower($model::classNameShort());
     }
 
     public function getVerboseNamePlural()
     {
-        return isset($this->names[1]) ? $this->names[1] : 'object';
+        $model = $this->getModel();
+        return isset($this->names[1]) ? $this->names[1] : strtolower($model::classNameShort()) . 's';
     }
 }
