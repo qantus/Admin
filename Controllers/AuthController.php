@@ -44,30 +44,14 @@ class AuthController extends CoreController
     public function actionLogin()
     {
         $form = new LoginForm();
-<<<<<<< HEAD
         if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->login()) {
             if ($this->r->isAjax) {
                 echo $this->json(array(
                     'status' => 'success',
-                    'title' => UserModule::t('You have successfully logged in to the site')
+                    'title'  => UserModule::t('You have successfully logged in to the site')
                 ));
             } else {
                 $this->r->redirect('admin.index');
-=======
-
-        if (!empty($_POST)) {
-            $form->setAttributes($_POST);
-
-            if ($form->isValid() && $form->login()) {
-                if ($this->r->isAjax) {
-                    $this->json(array(
-                        'status' => 'success',
-                        'title' => UserModule::t('You have successfully logged in to the site')
-                    ));
-                } else {
-                    $this->r->redirect('admin.index');
-                }
->>>>>>> 9da733347015706841da733e94e85735c61ca615
             }
         }
 
