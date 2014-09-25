@@ -22,7 +22,11 @@
                         {% if field.className == 'Mindy\\Orm\\Fields\\DateTimeField' %}
                             {{ value|humanizeDateTime }}
                         {% else %}
-                            {{ value }}
+                            {% if field.className == 'Mindy\\Orm\\Fields\\FileField' %}
+                                <a href="{{ value }}">{{ value }}</a>
+                            {% else %}
+                                {{ value }}
+                            {% endif %}
                         {% endif %}
                     {% endif %}
                 </section>
