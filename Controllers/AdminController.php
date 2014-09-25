@@ -178,7 +178,7 @@ class AdminController extends BackendController
         }
 
         $admin = new $className();
-        $admin->remove([$id]);
+        $admin->delete($id);
         $this->redirect(Mindy::app()->urlManager->reverse('admin.list', ['module' => $module, 'adminClass' => $adminClass]));
     }
 

@@ -411,11 +411,19 @@ abstract class ModelAdmin
         ];
     }
 
-    public function remove(array $data = [])
+    public function delete($pk)
     {
         /* @var $qs \Mindy\Orm\QuerySet */
         $modelClass = $this->getModel();
-        foreach ($data as $pk) {
+        $modelClass::objects()->filter(['pk' => $pk])->delete();
+    }
+
+    public function remove(array $data = [])
+    {
+        $models = isset($data['models']) ? $data['models'] : [];
+        /* @var $qs \Mindy\Orm\QuerySet */
+        $modelClass = $this->getModel();
+        foreach ($models as $pk) {
             $model = $modelClass::objects()->get(['pk' => $pk]);
             if ($model) {
                 $model->delete();
