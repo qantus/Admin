@@ -114,7 +114,7 @@ class AdminController extends BackendController
         $context = $admin->info($id, $_GET);
         $this->setBreadcrumbs($context['breadcrumbs']);
 
-        $out = $this->render($admin->infoTemplate, array_merge([
+        echo $this->render($admin->infoTemplate, array_merge([
             'actions' => $admin->getActions(),
             'module' => $admin->getModule(),
             'moduleName' => $moduleName,
@@ -122,13 +122,6 @@ class AdminController extends BackendController
             'adminClass' => $adminClass,
             'admin' => $admin,
         ], $context));
-
-        echo $this->render('admin/admin/info.html', array_merge(['adminClass' => $adminClass], [
-            'module' => $admin->getModule(),
-            'modelClass' => $admin->getModel(),
-            'out' => $out,
-            'admin' => $admin
-        ]));
     }
 
 
@@ -143,10 +136,13 @@ class AdminController extends BackendController
             $this->error(403);
         }
 
+        /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
         $context = $admin->create($_POST, $_FILES);
         $this->setBreadcrumbs($context['breadcrumbs']);
-        echo $this->render('admin/admin/create.html', array_merge(['module' => $module, 'adminClass' => $adminClass], $context));
+
+        $data = array_merge(['module' => $module, 'adminClass' => $adminClass], $context);
+        echo $this->render($admin->createTemplate, $data);
     }
 
     public function actionUpdate($module, $adminClass, $id)
@@ -160,10 +156,13 @@ class AdminController extends BackendController
             $this->error(403);
         }
 
+        /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
         $context = $admin->update($id, $_POST, $_FILES);
         $this->setBreadcrumbs($context['breadcrumbs']);
-        echo $this->render('admin/admin/update.html', array_merge(['module' => $module, 'adminClass' => $adminClass], $context));
+
+        $data = array_merge(['module' => $module, 'adminClass' => $adminClass], $context);
+        echo $this->render($admin->updateTemplate, $data);
     }
 
     public function actionDelete($module, $adminClass, $id)

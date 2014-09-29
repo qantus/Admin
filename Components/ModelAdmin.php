@@ -21,17 +21,38 @@ abstract class ModelAdmin
 {
     use Accessors, Configurator, MetaTrait, ApplicationList;
 
+    /**
+     * @var string or array
+     */
     public $sortingColumn;
-
+    /**
+     * @var int
+     */
     public $pageSize;
-
+    /**
+     * @var array
+     */
     public $params = [];
-
+    /**
+     * @var string
+     */
+    public $updateTemplate = 'admin/admin/update.html';
+    /**
+     * @var string
+     */
+    public $createTemplate = 'admin/admin/create.html';
+    /**
+     * @var string
+     */
     public $indexTemplate = 'admin/admin/_list.html';
-
+    /**
+     * @var string
+     */
     public $actionsTemplate = 'admin/admin/_actions.html';
-
-    public $infoTemplate = 'admin/admin/_info.html';
+    /**
+     * @var string
+     */
+    public $infoTemplate = 'admin/admin/info.html';
 
     public function getCanCreate()
     {
@@ -52,7 +73,7 @@ abstract class ModelAdmin
 
     public function getActionsList()
     {
-        return ['update', 'delete', 'view'];
+        return ['update', 'delete', 'info', 'view'];
     }
 
     public function getColumns()
@@ -424,8 +445,7 @@ abstract class ModelAdmin
         /* @var $qs \Mindy\Orm\QuerySet */
         $modelClass = $this->getModel();
         foreach ($models as $pk) {
-            $model = $modelClass::objects()->get(['pk' => $pk]);
-            if ($model) {
+            if ($model = $modelClass::objects()->get(['pk' => $pk])) {
                 $model->delete();
             }
         }
