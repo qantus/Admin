@@ -448,7 +448,9 @@ abstract class ModelAdmin
     {
         /* @var $qs \Mindy\Orm\QuerySet */
         $modelClass = $this->getModel();
-        $modelClass::objects()->filter(['pk' => $pk])->delete();
+        if ($model = $modelClass::objects()->get(['pk' => $pk])) {
+            $model->delete();
+        }
     }
 
     public function remove(array $data = [])
