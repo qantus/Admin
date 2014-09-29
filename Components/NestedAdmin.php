@@ -28,7 +28,7 @@ abstract class NestedAdmin extends ModelAdmin
     {
         $modelClass = $this->getModel();
         if (array_key_exists('id', $this->params) && $this->params['id']) {
-            $qs = $modelClass::tree()->filter(['pk' => $this->params['id']]);
+            $qs = $modelClass::objects()->filter(['pk' => $this->params['id']]);
             $model = $qs->get();
             return $model->{$this->nestedColumn};
         }else{
@@ -95,7 +95,7 @@ abstract class NestedAdmin extends ModelAdmin
         $parents = [];
 
         if ($model->pk) {
-            $parents = $model->tree()->ancestors()->all();
+            $parents = $model->objects()->ancestors()->all();
             $parents[] = $model;
         }
 
@@ -124,36 +124,36 @@ abstract class NestedAdmin extends ModelAdmin
         $modelClass = $this->getModel();
 
         /** @var \Mindy\Orm\TreeModel $model */
-        $model = $modelClass::tree()->filter(['pk' => $data['pk']])->get();
+        $model = $modelClass::objects()->filter(['pk' => $data['pk']])->get();
         if(!$model) {
             throw new Exception("Model not found");
         }
 
         if($model->getIsRoot()) {
-            $roots = $modelClass::tree()->roots()->all();
+            $roots = $modelClass::objects()->roots()->all();
 
             $models = $data['models'];
             $dataPk = [];
             foreach ($models as $position => $pk) {
                 $dataPk[$pk] = $position;
-                $modelClass::tree()->filter(['pk' => $pk])->update(['root' => $position]);
+                $modelClass::objects()->filter(['pk' => $pk])->update(['root' => $position]);
             }
 
             foreach($roots as $root) {
-                $root->tree()->descendants()->filter([
+                $root->objects()->descendants()->filter([
                     'level__gt' => 1
                 ])->update(['root' => $dataPk[$root->pk]]);
             }
         } else {
             $target = null;
             if(isset($data['insertBefore'])) {
-                $target = $modelClass::tree()->filter(['pk' => $data['insertBefore']])->get();
+                $target = $modelClass::objects()->filter(['pk' => $data['insertBefore']])->get();
                 if(!$target) {
                     throw new Exception("Target not found");
                 }
                 $model->moveBefore($target);
             } else if(isset($data['insertAfter'])) {
-                $target = $modelClass::tree()->filter(['pk' => $data['insertAfter']])->get();
+                $target = $modelClass::objects()->filter(['pk' => $data['insertAfter']])->get();
                 if(!$target) {
                     throw new Exception("Target not found");
                 }
@@ -162,16 +162,5 @@ abstract class NestedAdmin extends ModelAdmin
                 throw new Exception("Missing required parameter insertAfter or insertBefore");
             }
         }
-//        if (Mindy::app()->request->getIsAjax()) {
-//            echo Mindy::app()->controller->json([
-//                'success' => true,
-//                'html' => $this->index()
-//            ]);
-//        } else {
-//            $this->redirect('admin.list', [
-//                'module' => $this->getModel()->getModuleName(),
-//                'adminClass' => $this->classNameShort()
-//            ]);
-//        }
     }
 }

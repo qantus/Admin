@@ -41,4 +41,8 @@ return [
         'name' => 'info',
         'callback' => '\Modules\Admin\Controllers\AdminController:info'
     ],
+    '/changepassword/{id:\d+}' => [
+        'name' => 'changepassword',
+        'callback' => '\Modules\Admin\Controllers\AuthController:changepassword'
+    ],
 ];

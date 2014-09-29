@@ -14,13 +14,20 @@
 
 namespace Modules\Admin\Controllers;
 
+use Mindy\Base\ApplicationList;
 use Mindy\Base\Mindy;
+use Mindy\Helper\Text;
 use Modules\Core\Controllers\CoreController;
+use Modules\User\Admin\UserAdmin;
+use Modules\User\Forms\ChangePasswordForm;
 use Modules\User\Forms\LoginForm;
+use Modules\User\Models\User;
 use Modules\User\UserModule;
 
 class AuthController extends CoreController
 {
+    use ApplicationList;
+
     public $defaultAction = 'login';
 
     public $defaultRedirectUrl = '/';
@@ -80,5 +87,45 @@ class AuthController extends CoreController
 
         $auth->logout();
         $this->r->redirect('admin.login');
+    }
+
+    public function actionChangepassword($id)
+    {
+        $auth = Mindy::app()->auth;
+        if ($auth->isGuest) {
+            $this->r->redirect(Mindy::app()->homeUrl);
+        }
+
+        $model = User::objects()->filter(['pk' => $id])->get();
+        if($model === null) {
+            $this->error(404);
+        }
+
+        $admin = new UserAdmin;
+        $this->addBreadcrumb(Text::mbUcfirst($admin->getVerboseNamePlural()), Mindy::app()->urlManager->reverse('admin.list', [
+            'adminClass' => $admin->className(),
+            'model' => User::className()
+        ]));
+        $this->addBreadcrumb((string) $model, $model->getAbsoluteUrl());
+        $this->addBreadcrumb(UserModule::t('Change password'));
+
+        $form = new ChangePasswordForm([
+            'instance' => $model
+        ]);
+        if($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
+            $this->r->flash->success(UserModule::t('Password changed'));
+            $this->r->http->refresh();
+        }
+
+        echo $this->render('admin/changepassword.html', [
+            'model' => $model,
+            'form' => $form
+        ]);
+    }
+
+    public function render($view, array $data = [])
+    {
+        $data['apps'] = $this->getApplications();
+        return parent::render($view, $data);
     }
 }

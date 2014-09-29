@@ -332,6 +332,11 @@ abstract class ModelAdmin
         ];
     }
 
+    public function getInfoFields(Model $model)
+    {
+        return array_keys($model->getFieldsInit());
+    }
+
     public function info($pk, array $data = [])
     {
         $modelClass = $this->getModel();
@@ -342,9 +347,17 @@ abstract class ModelAdmin
         }
         $this->initBreadcrumbs($model);
 
+        $fields = [];
+        foreach($this->getInfoFields($model) as $fieldName) {
+            if($fieldName === 'pk') {
+                $fieldName = $model::getPkName();
+            }
+            $fields[$fieldName] = $model->getField($fieldName);
+        }
         return [
             'admin' => $this,
             'model' => $model,
+            'fields' => $fields,
             'modelClass' => $modelClass,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), [
                 ['name' => (string)$model]
@@ -379,11 +392,10 @@ abstract class ModelAdmin
             ];
         }
 
-        $data = [
+        return ['admin.list', [
             'module' => $model->getModuleName(),
             'adminClass' => $this->classNameShort()
-        ];
-        return ['admin.list', $data];
+        ]];
     }
 
     public function create(array $data = [], array $files = [])

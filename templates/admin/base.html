@@ -21,6 +21,9 @@
                         <a href="/" target="_blank" rel="tooltip" title="{{ t('Open site', 'admin') }}">
                             <i class="icon-link"></i>
                         </a>
+                        <a href="{% url 'admin.changepassword' user.pk %}" rel="tooltip" title="{{ t('Change password', 'user') }}">
+                            <i class="icon-key"></i>
+                        </a>
                         <a href="{% url 'core.settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
                             <i class="icon-settings"></i>
                         </a>

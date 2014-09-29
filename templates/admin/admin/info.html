@@ -8,7 +8,7 @@
 
 {% block content %}
     <section class="model-info">
-        {% for name, field in model.getFieldsInit() %}
+        {% for name, field in fields %}
             <section class="row">
                 <section class="field">
                     <section class="column large-3 field-label">
@@ -23,19 +23,19 @@
                         {% endif %}
                     </section>
                     <section class="column large-9 field-value">
+                        {# @TODO: Fix me please #}
                         {% set value = model.getField(name).getValue() %}
                         {% if field.choices %}
                             {{ field.choices[value] }}
+                        {% elseif field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
+                            {% if value %}{{ t('Yes', 'admin') }}{% else %}{{ t('No', 'admin') }}{% endif %}
+                        {% elseif field.className == 'Mindy\\Orm\\Fields\\DateTimeField' or field.className == 'Mindy\\Orm\\Fields\\DateField' %}
+                            {{ value|humanizeDateTime }}
                         {% else %}
-                            {# @TODO: Fix me please #}
-                            {% if field.className == 'Mindy\\Orm\\Fields\\DateTimeField' %}
-                                {{ value|humanizeDateTime }}
+                            {% if field.className == 'Mindy\\Orm\\Fields\\FileField' %}
+                                <a href="{{ value }}">{{ value }}</a>
                             {% else %}
-                                {% if field.className == 'Mindy\\Orm\\Fields\\FileField' %}
-                                    <a href="{{ value }}">{{ value }}</a>
-                                {% else %}
-                                    {{ value }}
-                                {% endif %}
+                                {{ value }}
                             {% endif %}
                         {% endif %}
                     </section>
