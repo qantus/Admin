@@ -12,6 +12,10 @@
                 <span class="user">{{ message.user_id }} {{ message.username }}</span>
                 <span class="message">{{ message.message }}</span>
             </li>
+        {% else %}
+            <li>
+                <span class="message">За последнее время ничего интересного не произошло.</span>
+            </li>
         {% endfor %}
     </ul>
 

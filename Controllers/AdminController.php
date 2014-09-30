@@ -16,9 +16,7 @@ class AdminController extends BackendController
 
     public function actionIndex()
     {
-        $pager = new Pagination([
-            'source' => UserLog::read(100),
-        ]);
+        $pager = new Pagination(UserLog::read(100));
         $messages = $pager->paginate();
         echo $this->render('admin/index.html', [
             'messages' => $messages,
