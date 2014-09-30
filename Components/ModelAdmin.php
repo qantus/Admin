@@ -73,7 +73,7 @@ abstract class ModelAdmin
 
     public function getActionsList()
     {
-        return ['update', 'delete', 'info', 'view'];
+        return ['update', 'delete', 'view'];
     }
 
     public function getColumns()
