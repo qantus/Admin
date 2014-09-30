@@ -103,10 +103,14 @@ class AuthController extends CoreController
 
         $admin = new UserAdmin;
         $this->addBreadcrumb(Text::mbUcfirst($admin->getVerboseNamePlural()), Mindy::app()->urlManager->reverse('admin.list', [
-            'adminClass' => $admin->className(),
-            'model' => User::className()
+            'module' => User::getModuleName(),
+            'adminClass' => $admin->classNameShort()
         ]));
-        $this->addBreadcrumb((string) $model, $model->getAbsoluteUrl());
+        $this->addBreadcrumb((string) $model, Mindy::app()->urlManager->reverse('admin.update', [
+            'module' => User::getModuleName(),
+            'adminClass' => $admin->classNameShort(),
+            'id' => $id
+        ]));
         $this->addBreadcrumb(UserModule::t('Change password'));
 
         $form = new ChangePasswordForm([
