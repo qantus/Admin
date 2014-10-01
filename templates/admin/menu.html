@@ -8,9 +8,9 @@
                 <span class="module-name">
             {% endif %}
 
-                <i class="{% if item.icon %}{{ item.icon }}{% else %}icon-framelist{% endif %}"></i>
+            <span class="{{ item.module|lower }} module-image" ></span>
 
-                {{ item.name }}
+            {{ item.name }}
 
             {% if not item.items %}
                 </span>
