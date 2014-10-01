@@ -1,7 +1,24 @@
 {% for item in apps %}
     <li>
-        <span><i class="{% if item.icon %}{{ item.icon }}{% else %}icon-framelist{% endif %}"></i> {{ item.name }}</span>
-        {% if item.items %}
+        <span>
+            {% if item.items %}
+                {% set first = item.items|first %}
+                <a class="module-name" href="{% if first.url %}{% url first.url item.module first.adminClass %}{% else %}{% url 'admin.list' item.module first.adminClass %}{% endif %}">
+            {% else %}
+                <span class="module-name">
+            {% endif %}
+
+                <i class="{% if item.icon %}{{ item.icon }}{% else %}icon-framelist{% endif %}"></i>
+
+                {{ item.name }}
+
+            {% if not item.items %}
+                </span>
+            {% else %}
+                </a>
+            {% endif %}
+        </span>
+        {% if item.items and item.items|length > 1 %}
             <ul>
                 {% for child in item.items %}
                     <li>

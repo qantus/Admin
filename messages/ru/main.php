@@ -28,5 +28,8 @@ return array (
   'All news' => 'Все новости',
   'Go' => 'Go',
   'Number / identifier' => 'Номер / идентификатор',
-  'Information about' => 'Информация:'
+  'Information about' => 'Информация:',
+  '{model} [[{url}|{name}]] was updated' => 'Обновлено: {model} [[{url}|{name}]]',
+  '{model} [[{url}|{name}]] was created' => 'Создано: {model} [[{url}|{name}]]',
+  '{model} [[{url}|{name}]] was deleted' => 'Удалено: {model} [[{url}|{name}]]',
 );

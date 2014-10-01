@@ -5,7 +5,7 @@
         <li{% if loop.last %} class="last"{% endif %}>
             <span class="icon {{ message.icon }}"></span>
             <p class="datetime">{{ message.humanized_date }}</p>
-            <p><a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a>: {{ message.message }}</p>
+            <p><a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a>: {{ message.message|safe }}</p>
         </li>
     {% endfor %}
 </ul>

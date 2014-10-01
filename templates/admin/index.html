@@ -8,9 +8,9 @@
     <ul class="user-action-list">
         {% for message in messages %}
             <li>
-                <span class="datetime">{{ message.date }} {{ message.time }}</span>
-                <span class="user">{{ message.user_id }} {{ message.username }}</span>
-                <span class="message">{{ message.message }}</span>
+                <span class="datetime">{{ message.humanized_date }}</span>
+                <span class="user"><a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a></span>
+                <span class="message">{{ message.message|safe }}</span>
             </li>
         {% else %}
             <li>
