@@ -1,11 +1,11 @@
 <h5>Последние изменения:</h5>
 
-{% set actions = user_actions(6) %}
+{% set actions = user_actions(10) %}
 {% if actions %}
     <ul class="user-action-list">
-        {% for message in user_actions(6) %}
+        {% for message in actions %}
             <li{% if loop.last %} class="last"{% endif %}>
-                <span class="icon {{ message.icon }}"></span>
+                <span class="icon module-image {{ message.module|lower }}"></span>
                 <p class="datetime">{{ message.humanized_date }}</p>
                 <p><a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a>: {{ message.message|safe }}</p>
             </li>
