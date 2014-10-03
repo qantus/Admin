@@ -1,11 +1,23 @@
 <h5>Последние изменения:</h5>
 
-<ul class="user-action-list">
-    {% for message in user_actions(6) %}
-        <li{% if loop.last %} class="last"{% endif %}>
-            <span class="icon {{ message.icon }}"></span>
-            <p class="datetime">{{ message.humanized_date }}</p>
-            <p><a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a>: {{ message.message|safe }}</p>
-        </li>
-    {% endfor %}
-</ul>
+{% set actions = user_actions(10) %}
+{% if actions %}
+    <ul class="user-action-list">
+        {% for message in actions %}
+            <li{% if loop.last %} class="last"{% endif %}>
+                <span class="icon module-image {{ message.module|lower }}"></span>
+                <p class="datetime">{{ message.humanized_date }}</p>
+                <p>
+                    {% if message.username != 'Guest' %}
+                        <a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a>:
+                    {% endif %}
+                    {{ message.message|safe }}
+                </p>
+            </li>
+        {% endfor %}
+    </ul>
+{% else %}
+    <section class="user-actions-empty">
+        {{ t('Lately, nothing interesting happened.', 'admin') }}
+    </section>
+{% endif %}

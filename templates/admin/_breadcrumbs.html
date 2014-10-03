@@ -1,8 +1,8 @@
 <nav id="breadcrumbs">
-    <li>
-        <a href="{% url 'admin.index' %}">{{ t('Home', 'admin') }}</a>
-    </li>
     {% if this.breadcrumbs|length > 0 %}
+        <li>
+            <a href="{% url 'admin.index' %}">{{ t('Home', 'admin') }}</a>
+        </li>
         <li>/</li>
     {% endif %}
     {% for bc in this.breadcrumbs %}
