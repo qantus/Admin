@@ -95,7 +95,7 @@ abstract class NestedAdmin extends ModelAdmin
         $parents = [];
 
         if ($model->pk) {
-            $parents = $model->objects()->ancestors()->all();
+            $parents = $model->objects()->ancestors()->order(['lft'])->all();
             $parents[] = $model;
         }
 
