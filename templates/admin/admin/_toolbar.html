@@ -1,14 +1,16 @@
 <div class="toolbar-holder">
     <section class="toolbar sticky">
-        <a class="button search" href="#">
-            <i class="icon-search"></i>
-        </a>
+        {% if searchFields %}
+            <a class="button search" href="#">
+                <i class="icon-search"></i>
+            </a>
 
-        <div class="search-toolbar">
-            <i class="icon-search"></i>
-            <input type="text" name="search" placeholder="{{ t('Search','admin') }}..."/>
-            <a class="exit-search" href="#"><i class="icon-x"></i></a>
-        </div>
+            <div class="search-toolbar">
+                <i class="icon-search"></i>
+                <input type="text" name="search" placeholder="{{ t('Search','admin') }}..."/>
+                <a class="exit-search" href="#"><i class="icon-x"></i></a>
+            </div>
+        {% endif %}
 
         {% if admin.canCreate %}
             <a href="{% url 'admin.create' moduleName adminClass %}" class="create button sub-button-left custom-button">

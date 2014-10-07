@@ -79,7 +79,8 @@ abstract class NestedAdmin extends ModelAdmin
             'pager' => $pager,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), $this->getParentBreadcrumbs($model)),
             'sortingColumn' => $this->sortingColumn,
-            'currentOrder' => $currentOrder
+            'currentOrder' => $currentOrder,
+            'searchFields' => $this->getSearchFields()
         ];
     }
 
