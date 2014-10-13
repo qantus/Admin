@@ -113,9 +113,7 @@ class AuthController extends CoreController
         ]));
         $this->addBreadcrumb(UserModule::t('Change password'));
 
-        $form = new ChangePasswordForm([
-            'instance' => $model
-        ]);
+        $form = new ChangePasswordForm(['model' => $model]);
         if($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
             $this->r->flash->success(UserModule::t('Password changed'));
             $this->r->http->refresh();
