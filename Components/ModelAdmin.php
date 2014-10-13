@@ -225,7 +225,8 @@ abstract class ModelAdmin
             'pager' => $pager,
             'breadcrumbs' => $this->getBreadcrumbs(),
             'currentOrder' => $currentOrder,
-            'sortingColumn' => $this->sortingColumn
+            'sortingColumn' => $this->sortingColumn,
+            'searchFields' => $this->getSearchFields()
         ];
     }
 
