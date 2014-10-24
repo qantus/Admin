@@ -1,7 +1,7 @@
 {% extends 'admin/base.html' %}
 
 {% block heading %}
-    <h1>{{ t('Update', 'admin') }} {{ admin.getVerboseName }}</h1>
+    <h1>{{ admin.getVerboseNameUpdate(model) }}</h1>
 {% endblock %}
 
 {% block content_class %}update{% endblock %}

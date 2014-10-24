@@ -22,7 +22,17 @@
                                     {{ admin.getColumnValue(column, model) }}
                                 </a>
                             {% else %}
-                                {{ admin.getColumnValue(column, model) }}
+                                {% set value = admin.getColumnValue(column, model) %}
+                                {% set field = model.getField(column) %}
+                                {% if field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
+                                    {% if value %}
+                                        {{ t('Yes', 'admin') }}
+                                    {% else %}
+                                        {{ t('No', 'admin') }}
+                                    {% endif %}
+                                {% else %}
+                                    {{ value }}
+                                {% endif %}
                             {% endif %}
                         </td>
                     {% endfor %}

@@ -139,8 +139,10 @@ class AdminController extends BackendController
         $context = $admin->create($_POST, $_FILES);
         $this->setBreadcrumbs($context['breadcrumbs']);
 
-        $data = array_merge(['module' => $module, 'adminClass' => $adminClass], $context);
-        echo $this->render($admin->createTemplate, $data);
+        echo $this->render($admin->createTemplate, array_merge([
+            'module' => $module,
+            'adminClass' => $adminClass
+        ], $context));
     }
 
     public function actionUpdate($module, $adminClass, $id)
@@ -159,8 +161,10 @@ class AdminController extends BackendController
         $context = $admin->update($id, $_POST, $_FILES);
         $this->setBreadcrumbs($context['breadcrumbs']);
 
-        $data = array_merge(['module' => $module, 'adminClass' => $adminClass], $context);
-        echo $this->render($admin->updateTemplate, $data);
+        echo $this->render($admin->updateTemplate, array_merge([
+            'module' => $module,
+            'adminClass' => $adminClass
+        ], $context));
     }
 
     public function actionDelete($module, $adminClass, $id)
@@ -176,7 +180,10 @@ class AdminController extends BackendController
 
         $admin = new $className();
         $admin->delete($id);
-        $this->redirect(Mindy::app()->urlManager->reverse('admin.list', ['module' => $module, 'adminClass' => $adminClass]));
+        $this->redirect(Mindy::app()->urlManager->reverse('admin.list', [
+            'module' => $module,
+            'adminClass' => $adminClass
+        ]));
     }
 
     protected function can($module, $adminClass, $actionId, $params = [])

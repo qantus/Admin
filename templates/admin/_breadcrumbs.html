@@ -13,7 +13,11 @@
             {% if loop.last %}
                 {{ bc.name }}
             {% else %}
-                <a href="{{ bc.url }}">{{ bc.name }}</a>
+                {% if bc.url %}
+                    <a href="{{ bc.url }}">{{ bc.name }}</a>
+                {% else %}
+                    {{ bc.name }}
+                {% endif %}
             {% endif %}
 
             {% if bc.items|length > 1 %}

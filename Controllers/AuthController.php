@@ -51,7 +51,7 @@ class AuthController extends CoreController
     public function actionLogin()
     {
         $form = new LoginForm();
-        if ($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->login()) {
+        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->login()) {
             if ($this->r->isAjax) {
                 echo $this->json(array(
                     'status' => 'success',
@@ -114,7 +114,7 @@ class AuthController extends CoreController
         $this->addBreadcrumb(UserModule::t('Change password'));
 
         $form = new ChangePasswordForm(['model' => $model]);
-        if($this->r->isPost && $form->setAttributes($_POST)->isValid() && $form->save()) {
+        if($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
             $this->r->flash->success(UserModule::t('Password changed'));
             $this->r->http->refresh();
         }

@@ -5,7 +5,6 @@ namespace Modules\Admin\Components;
 use Exception;
 use Mindy\Base\ApplicationList;
 use Mindy\Base\Mindy;
-use Mindy\Form\ManagedForm;
 use Mindy\Form\ModelForm;
 use Mindy\Helper\Text;
 use Mindy\Helper\Traits\Accessors;
@@ -82,11 +81,6 @@ abstract class ModelAdmin
         return array_keys($model->getFieldsInit());
     }
 
-    public function getVerboseNameList()
-    {
-        return Text::mbUcfirst($this->getVerboseNamePlural());
-    }
-
     public function verboseName($column)
     {
         $model = $this->getModel();
@@ -133,13 +127,13 @@ abstract class ModelAdmin
      */
     public function getColumnValue($column, $model)
     {
-        if($column == 'pk') {
+        if ($column == 'pk') {
             $column = $model->getPkName();
         }
         if ($model->hasAttribute($column)) {
             return $model->getAttribute($column);
         } else {
-            if($model->hasField($column)) {
+            if ($model->hasField($column)) {
                 return $model->__get($column);
             } else {
                 $method = 'get' . ucfirst($column);
@@ -272,13 +266,20 @@ abstract class ModelAdmin
 
     public function initBreadcrumbs($model)
     {
+        $this->addBreadcrumb($this->getModule()->getName());
+
         $this->addBreadcrumb(
-            Text::mbUcfirst($this->getVerboseNamePlural()),
+            Text::mbUcfirst($this->getVerboseName()),
             Mindy::app()->urlManager->reverse('admin.list', [
                 'module' => $model->getModuleName(),
                 'adminClass' => $this->classNameShort()
             ])
         );
+    }
+
+    public function getInfoFields(Model $model)
+    {
+        return array_keys($model->getFieldsInit());
     }
 
     /**
@@ -303,21 +304,7 @@ abstract class ModelAdmin
             'instance' => $model
         ]);
 
-        if ($form instanceof ManagedForm) {
-            if (!empty($data) || !empty($files)) {
-                $form->setAttributes($data, $files);
-            }
-        } else {
-            if (!empty($data)) {
-                $form->setAttributes($data);
-            }
-
-            if (!empty($files)) {
-                $form->setAttributes($files);
-            }
-        }
-
-        if (!empty($data) && $form->isValid() && $form->save()) {
+        if (!empty($data) && $form->populate($data, $files)->isValid() && $form->save()) {
             Mindy::app()->request->flash->success(CoreModule::t('Changes saved'));
             $this->redirectNext($data, $form);
         }
@@ -328,14 +315,9 @@ abstract class ModelAdmin
             'form' => $form,
             'modelClass' => $modelClass,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), [
-                ['name' => (string)$model]
+                ['name' => $this->getVerboseNameUpdate($model)]
             ])
         ];
-    }
-
-    public function getInfoFields(Model $model)
-    {
-        return array_keys($model->getFieldsInit());
     }
 
     public function info($pk, array $data = [])
@@ -349,8 +331,8 @@ abstract class ModelAdmin
         $this->initBreadcrumbs($model);
 
         $fields = [];
-        foreach($this->getInfoFields($model) as $fieldName) {
-            if($fieldName === 'pk') {
+        foreach ($this->getInfoFields($model) as $fieldName) {
+            if ($fieldName === 'pk') {
                 $fieldName = $model::getPkName();
             }
             $fields[$fieldName] = $model->getField($fieldName);
@@ -364,39 +346,6 @@ abstract class ModelAdmin
                 ['name' => (string)$model]
             ])
         ];
-    }
-    public function redirectNext($data, $form)
-    {
-        list($route, $params) = $this->getNextRoute($data, $form);
-        $this->redirect($route, $params);
-    }
-
-    public function getNextRoute(array $data, $form)
-    {
-        $model = $form->getInstance();
-        if (array_key_exists('save_continue', $data)) {
-            return [
-                'admin.update', [
-                    'module' => $model->getModuleName(),
-                    'adminClass' => $this->classNameShort(),
-                    'id' => $model->pk
-                ]
-            ];
-        }
-
-        if (array_key_exists('save_create', $data)) {
-            return [
-                'admin.create', [
-                    'module' => $model->getModuleName(),
-                    'adminClass' => $this->classNameShort()
-                ]
-            ];
-        }
-
-        return ['admin.list', [
-            'module' => $model->getModuleName(),
-            'adminClass' => $this->classNameShort()
-        ]];
     }
 
     public function create(array $data = [], array $files = [])
@@ -416,21 +365,7 @@ abstract class ModelAdmin
             'instance' => $model
         ]);
 
-        if ($form instanceof ManagedForm) {
-            if (!empty($data) || !empty($files)) {
-                $form->setAttributes($data, $files);
-            }
-        } else {
-            if (!empty($data)) {
-                $form->setAttributes($data);
-            }
-
-            if (!empty($files)) {
-                $form->setAttributes($files);
-            }
-        }
-
-        if (!empty($data) && $form->isValid() && $form->save()) {
+        if (!empty($data) && $form->populate($data, $files)->isValid() && $form->save()) {
             Mindy::app()->request->flash->success(CoreModule::t('Changes saved'));
             $this->redirectNext($data, $form);
         }
@@ -440,7 +375,7 @@ abstract class ModelAdmin
             'form' => $form,
             'modelClass' => $modelClass,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), [
-                ['name' => AdminModule::t('Create')]
+                ['name' => $this->getVerboseNameCreate()]
             ])
         ];
     }
@@ -451,6 +386,34 @@ abstract class ModelAdmin
         $modelClass = $this->getModel();
         if ($model = $modelClass::objects()->get(['pk' => $pk])) {
             $model->delete();
+        }
+    }
+
+    public function redirectNext($data, $form)
+    {
+        list($route, $params) = $this->getNextRoute($data, $form);
+        $this->redirect($route, $params);
+    }
+
+    public function getNextRoute(array $data, $form)
+    {
+        $model = $form->getInstance();
+        if (array_key_exists('save_continue', $data)) {
+            return ['admin.update', [
+                'module' => $model->getModuleName(),
+                'adminClass' => $this->classNameShort(),
+                'id' => $model->pk
+            ]];
+        } else if (array_key_exists('save_create', $data)) {
+            return ['admin.create', [
+                'module' => $model->getModuleName(),
+                'adminClass' => $this->classNameShort()
+            ]];
+        } else {
+            return ['admin.list', [
+                'module' => $model->getModuleName(),
+                'adminClass' => $this->classNameShort()
+            ]];
         }
     }
 
@@ -472,7 +435,7 @@ abstract class ModelAdmin
     {
         /* @var $qs \Mindy\Orm\QuerySet */
         $modelClass = $this->getModel();
-        if(isset($data['models'])) {
+        if (isset($data['models'])) {
             $models = $data['models'];
         } else {
             throw new Exception("Failed to receive models");
@@ -517,22 +480,31 @@ abstract class ModelAdmin
         $app->request->redirect($app->urlManager->reverse($route, $data));
     }
 
-    public function getNames()
+    public function getNames($model = null)
     {
-        $model = $this->getModel();
-        $className = strtolower($model::classNameShort());
-        return [$className, $className . 's', $className . 's'];
+        return $this->getModel()->getAdminNames($model);
     }
 
     public function getVerboseName()
     {
-        $model = $this->getModel();
-        return isset($this->names[0]) ? $this->names[0] : strtolower($model::classNameShort());
+        $names = $this->getNames();
+        return isset($names[0]) ? $names[0] : strtolower($this->getModel()->classNameShort());
     }
 
-    public function getVerboseNamePlural()
+    public function getVerboseNameCreate()
     {
-        $model = $this->getModel();
-        return isset($this->names[1]) ? $this->names[1] : strtolower($model::classNameShort()) . 's';
+        $names = $this->getNames();
+        return isset($names[1]) ? $names[1] : strtolower($this->getModel()->classNameShort());
+    }
+
+    public function getVerboseNameUpdate($model = null)
+    {
+        $names = $this->getNames($model);
+        return isset($names[2]) ? $names[2] : strtolower($this->getModel()->classNameShort());
+    }
+
+    public function getVerboseNameList()
+    {
+        return Text::mbUcfirst($this->getVerboseName());
     }
 }
