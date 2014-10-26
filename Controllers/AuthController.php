@@ -102,7 +102,7 @@ class AuthController extends CoreController
         }
 
         $admin = new UserAdmin;
-        $this->addBreadcrumb(Text::mbUcfirst($admin->getVerboseNamePlural()), Mindy::app()->urlManager->reverse('admin.list', [
+        $this->addBreadcrumb(Text::mbUcfirst($admin->getVerboseName()), Mindy::app()->urlManager->reverse('admin.list', [
             'module' => User::getModuleName(),
             'adminClass' => $admin->classNameShort()
         ]));
