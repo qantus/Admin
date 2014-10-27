@@ -3,7 +3,9 @@
 namespace Modules\Admin\Controllers;
 
 use Mindy\Base\Mindy;
+use Mindy\Base\Module;
 use Mindy\Pagination\Pagination;
+use Modules\Admin\Components\ModelAdmin;
 use Modules\Core\Components\UserLog;
 use Modules\Core\Controllers\BackendController;
 
@@ -59,7 +61,8 @@ class AdminController extends BackendController
             'admin' => $admin,
         ], $context));
 
-        $this->setBreadcrumbs($context['breadcrumbs']);
+        $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
+        $this->setBreadcrumbs($breadcrumbs);
 
         if ($this->r->isAjax) {
             echo $out;
@@ -71,18 +74,6 @@ class AdminController extends BackendController
                 'admin' => $admin
             ]));
         }
-    }
-
-    public function formatBreadcrumbs(array $menu = [], $admin)
-    {
-        $name = Mindy::app()->getModule($admin->getModule()->id)->getName();
-        foreach ($menu as $item) {
-            if ($item['name'] == $name) {
-                return $item['items'];
-            }
-        }
-
-        return [];
     }
 
     protected function getAdminClassName($module, $adminClass)
@@ -108,9 +99,9 @@ class AdminController extends BackendController
 
         $admin = new $className();
         $moduleName = $admin->getModel()->getModuleName();
-
         $context = $admin->info($id, $_GET);
-        $this->setBreadcrumbs($context['breadcrumbs']);
+        $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
+        $this->setBreadcrumbs($breadcrumbs);
 
         echo $this->render($admin->infoTemplate, array_merge([
             'actions' => $admin->getActions(),
@@ -137,7 +128,8 @@ class AdminController extends BackendController
         /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
         $context = $admin->create($_POST, $_FILES);
-        $this->setBreadcrumbs($context['breadcrumbs']);
+        $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
+        $this->setBreadcrumbs($breadcrumbs);
 
         echo $this->render($admin->createTemplate, array_merge([
             'module' => $module,
@@ -159,7 +151,8 @@ class AdminController extends BackendController
         /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
         $context = $admin->update($id, $_POST, $_FILES);
-        $this->setBreadcrumbs($context['breadcrumbs']);
+        $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
+        $this->setBreadcrumbs($breadcrumbs);
 
         echo $this->render($admin->updateTemplate, array_merge([
             'module' => $module,
@@ -190,5 +183,34 @@ class AdminController extends BackendController
     {
         $code = $module . '.admin.' . strtolower($adminClass) . '.' . $actionId;
         return Mindy::app()->user->can($code, $params);
+    }
+
+    protected function menuToBreadcrumbs(Module $module)
+    {
+        $menu = $module->getMenu();
+        $breadcrumbs = [];
+        foreach ($menu['items'] as $menu) {
+            $breadcrumbs[] = [
+                'name' => $menu['name'],
+                'url' => Mindy::app()->urlManager->reverse('admin.list', [
+                        'module' => $module->getId(),
+                        'adminClass' => $menu['adminClass']
+                    ])
+            ];
+        }
+        return $breadcrumbs;
+    }
+
+    public function formatBreadcrumbs(array $breadcrumbs, ModelAdmin $admin)
+    {
+        foreach ($breadcrumbs as $i => &$item) {
+            if ($i == 1) {
+                $item['items'] = $this->menuToBreadcrumbs($admin->getModule());
+                break;
+            }
+            continue;
+        }
+
+        return $breadcrumbs;
     }
 }
