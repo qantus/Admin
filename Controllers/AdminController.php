@@ -63,6 +63,7 @@ class AdminController extends BackendController
 
         $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
         $this->setBreadcrumbs($breadcrumbs);
+        $this->convertBreadcrumbsToTitle($context['breadcrumbs']);
 
         if ($this->r->isAjax) {
             echo $out;
@@ -102,6 +103,7 @@ class AdminController extends BackendController
         $context = $admin->info($id, $_GET);
         $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
         $this->setBreadcrumbs($breadcrumbs);
+        $this->convertBreadcrumbsToTitle($context['breadcrumbs']);
 
         echo $this->render($admin->infoTemplate, array_merge([
             'actions' => $admin->getActions(),
@@ -130,6 +132,7 @@ class AdminController extends BackendController
         $context = $admin->create($_POST, $_FILES);
         $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
         $this->setBreadcrumbs($breadcrumbs);
+        $this->convertBreadcrumbsToTitle($context['breadcrumbs']);
 
         echo $this->render($admin->createTemplate, array_merge([
             'module' => $module,
@@ -153,6 +156,7 @@ class AdminController extends BackendController
         $context = $admin->update($id, $_POST, $_FILES);
         $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
         $this->setBreadcrumbs($breadcrumbs);
+        $this->convertBreadcrumbsToTitle($context['breadcrumbs']);
 
         echo $this->render($admin->updateTemplate, array_merge([
             'module' => $module,
@@ -212,5 +216,12 @@ class AdminController extends BackendController
         }
 
         return $breadcrumbs;
+    }
+
+    protected function convertBreadcrumbsToTitle($breadcrumbs)
+    {
+        foreach ($breadcrumbs as $bc) {
+            $this->addTitle($bc['name']);
+        }
     }
 }

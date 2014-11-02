@@ -3,7 +3,9 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>Foundation</title>
+    {%- if title or this.title -%}
+        <title>{% if this.title %}{% for title in this.title %}{{ title }}{% if not loop.last %} - {% endif %}{% endfor %}{% else %}{{ title }}{% endif %}</title>
+    {%- endif -%}
     {#<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet'#}
           {#type='text/css'>#}
     <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
