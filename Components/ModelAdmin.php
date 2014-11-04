@@ -392,18 +392,21 @@ abstract class ModelAdmin
     public function redirectNext($data, $form)
     {
         list($route, $params) = $this->getNextRoute($data, $form);
-        $this->redirect($route, $params);
+        if ($route && $params) {
+            $this->redirect($route, $params);
+        }
     }
 
     public function getNextRoute(array $data, $form)
     {
         $model = $form->getInstance();
         if (array_key_exists('save_continue', $data)) {
-            return ['admin.update', [
-                'module' => $model->getModuleName(),
-                'adminClass' => $this->classNameShort(),
-                'id' => $model->pk
-            ]];
+            return [null, null];
+//            return ['admin.update', [
+//                'module' => $model->getModuleName(),
+//                'adminClass' => $this->classNameShort(),
+//                'id' => $model->pk
+//            ]];
         } else if (array_key_exists('save_create', $data)) {
             return ['admin.create', [
                 'module' => $model->getModuleName(),
