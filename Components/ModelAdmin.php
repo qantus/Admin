@@ -23,7 +23,7 @@ abstract class ModelAdmin
     /**
      * @var string or array
      */
-    public $sortingColumn;
+    public $sortingColumn = '-pk';
     /**
      * @var int
      */
