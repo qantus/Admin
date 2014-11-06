@@ -401,12 +401,11 @@ abstract class ModelAdmin
     {
         $model = $form->getInstance();
         if (array_key_exists('save_continue', $data)) {
-            return [null, null];
-//            return ['admin.update', [
-//                'module' => $model->getModuleName(),
-//                'adminClass' => $this->classNameShort(),
-//                'id' => $model->pk
-//            ]];
+            return ['admin.update', [
+                'module' => $model->getModuleName(),
+                'adminClass' => $this->classNameShort(),
+                'id' => $model->pk
+            ]];
         } else if (array_key_exists('save_create', $data)) {
             return ['admin.create', [
                 'module' => $model->getModuleName(),
