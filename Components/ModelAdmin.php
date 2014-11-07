@@ -188,7 +188,7 @@ abstract class ModelAdmin
         $qs = $this->getQuerySet($model);
 
         $this->initBreadcrumbs($model);
-cd 
+
         if ($this->sortingColumn) {
             $qs->order([$this->sortingColumn]);
         }
