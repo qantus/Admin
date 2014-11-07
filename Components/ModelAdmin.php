@@ -23,7 +23,7 @@ abstract class ModelAdmin
     /**
      * @var string or array
      */
-    public $sortingColumn = '-pk';
+    public $sortingColumn = null;
     /**
      * @var int
      */
@@ -188,7 +188,7 @@ abstract class ModelAdmin
         $qs = $this->getQuerySet($model);
 
         $this->initBreadcrumbs($model);
-
+cd 
         if ($this->sortingColumn) {
             $qs->order([$this->sortingColumn]);
         }
