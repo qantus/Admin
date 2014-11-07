@@ -23,7 +23,7 @@ abstract class ModelAdmin
     /**
      * @var string or array
      */
-    public $sortingColumn;
+    public $sortingColumn = null;
     /**
      * @var int
      */
@@ -392,7 +392,9 @@ abstract class ModelAdmin
     public function redirectNext($data, $form)
     {
         list($route, $params) = $this->getNextRoute($data, $form);
-        $this->redirect($route, $params);
+        if ($route && $params) {
+            $this->redirect($route, $params);
+        }
     }
 
     public function getNextRoute(array $data, $form)
