@@ -11,11 +11,6 @@ use Modules\Core\Controllers\BackendController;
 
 class AdminController extends BackendController
 {
-    public function allowedActions()
-    {
-        return ['index'];
-    }
-
     public function actionIndex()
     {
         $pager = new Pagination(UserLog::read(100));
