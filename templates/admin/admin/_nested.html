@@ -30,6 +30,8 @@
                                     {% else %}
                                         {{ t('No', 'admin') }}
                                     {% endif %}
+                                {% elif field.choices[value] %}
+                                    {{ field.choices[value] }}
                                 {% else %}
                                     {{ value }}
                                 {% endif %}
