@@ -11,6 +11,9 @@ use Modules\Core\Controllers\BackendController;
 
 class AdminController extends BackendController
 {
+    /**
+     * @return string
+     */
     public function actionIndex()
     {
         $pager = new Pagination(UserLog::read(100));
@@ -21,6 +24,10 @@ class AdminController extends BackendController
         ]);
     }
 
+    /**
+     * @param $module
+     * @param $adminClass
+     */
     public function actionList($module, $adminClass)
     {
         $className = $this->getAdminClassName($module, $adminClass);
@@ -72,6 +79,11 @@ class AdminController extends BackendController
         }
     }
 
+    /**
+     * @param $module
+     * @param $adminClass
+     * @return null|string
+     */
     protected function getAdminClassName($module, $adminClass)
     {
         $className = "\\Modules\\" . ucfirst(strtolower($module)) . "\\Admin\\" . $adminClass;
@@ -82,6 +94,11 @@ class AdminController extends BackendController
         return null;
     }
 
+    /**
+     * @param $module
+     * @param $adminClass
+     * @param $id
+     */
     public function actionInfo($module, $adminClass, $id)
     {
         $className = $this->getAdminClassName($module, $adminClass);
@@ -110,7 +127,56 @@ class AdminController extends BackendController
         ], $context));
     }
 
+    /**
+     * @param $admin
+     * @return array
+     */
+    protected function processAjaxSelect($admin)
+    {
+        $json = [];
+        if (isset($_GET['select2'])) {
+            $q = $_GET['select2'];
+            $field = $_GET['field'];
+            $modelField = $_GET['modelField'];
 
+            $sourceModel = $admin->getModel();
+            if (!$sourceModel->hasField($field)) {
+                return [
+                    'items' => [],
+                    'total_count' => []
+                ];
+            }
+
+            $cls = $sourceModel->getField($field)->modelClass;
+            $model = new $cls;
+
+            $qs = $model->objects()->filter([$modelField . '__startswith' => $q]);
+            $total = $qs->count();
+
+            $pager = new Pagination($qs, [
+                'pageSize' => isset($_GET['pageSize']) ? $_GET['pageSize'] : 10
+            ]);
+            $pager->setPage(isset($_GET['page']) ? (int)$_GET['page'] : 1);
+
+            $models = [];
+            foreach ($pager->paginate() as $model) {
+                $models[] = [
+                    'text' => (string)$model,
+                    'id' => $model->pk
+                ];
+            }
+            return [
+                'items' => $models,
+                'total_count' => $total
+            ];
+        }
+        return $json;
+    }
+
+    /**
+     * @param $module
+     * @param $adminClass
+     */
     public function actionCreate($module, $adminClass)
     {
         $className = $this->getAdminClassName($module, $adminClass);
@@ -124,6 +190,13 @@ class AdminController extends BackendController
 
         /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
+
+        $json = $this->processAjaxSelect($admin);
+        if (!empty($json)) {
+            echo $this->json($json);
+            Mindy::app()->end();
+        }
+
         $context = $admin->create($_POST, $_FILES);
         $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
         $this->setBreadcrumbs($breadcrumbs);
@@ -135,6 +208,11 @@ class AdminController extends BackendController
         ], $context));
     }
 
+    /**
+     * @param $module
+     * @param $adminClass
+     * @param $id
+     */
     public function actionUpdate($module, $adminClass, $id)
     {
         $className = $this->getAdminClassName($module, $adminClass);
@@ -148,6 +226,13 @@ class AdminController extends BackendController
 
         /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
+
+        $json = $this->processAjaxSelect($admin);
+        if (!empty($json)) {
+            echo $this->json($json);
+            Mindy::app()->end();
+        }
+
         $context = $admin->update($id, $_POST, $_FILES);
         $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
         $this->setBreadcrumbs($breadcrumbs);
@@ -159,6 +244,11 @@ class AdminController extends BackendController
         ], $context));
     }
 
+    /**
+     * @param $module
+     * @param $adminClass
+     * @param $id
+     */
     public function actionDelete($module, $adminClass, $id)
     {
         $className = $this->getAdminClassName($module, $adminClass);
@@ -178,12 +268,23 @@ class AdminController extends BackendController
         ]));
     }
 
+    /**
+     * @param $module
+     * @param $adminClass
+     * @param $actionId
+     * @param array $params
+     * @return mixed
+     */
     protected function can($module, $adminClass, $actionId, $params = [])
     {
         $code = $module . '.admin.' . strtolower($adminClass) . '.' . $actionId;
         return Mindy::app()->user->can($code, $params);
     }
 
+    /**
+     * @param Module $module
+     * @return array
+     */
     protected function menuToBreadcrumbs(Module $module)
     {
         $menu = $module->getMenu();
@@ -200,6 +301,11 @@ class AdminController extends BackendController
         return $breadcrumbs;
     }
 
+    /**
+     * @param array $breadcrumbs
+     * @param ModelAdmin $admin
+     * @return array
+     */
     public function formatBreadcrumbs(array $breadcrumbs, ModelAdmin $admin)
     {
         foreach ($breadcrumbs as $i => &$item) {
@@ -213,6 +319,9 @@ class AdminController extends BackendController
         return $breadcrumbs;
     }
 
+    /**
+     * @param $breadcrumbs
+     */
     protected function convertBreadcrumbsToTitle($breadcrumbs)
     {
         foreach ($breadcrumbs as $bc) {
