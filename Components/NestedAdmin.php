@@ -65,7 +65,7 @@ abstract class NestedAdmin extends ModelAdmin
             } else {
                 $sort = "";
             }
-            $qs = $qs->order($sort . $column);
+            $qs = $qs->order([$sort . $column]);
         }
 
         $qs = $this->search($qs);

@@ -107,8 +107,9 @@ abstract class ModelAdmin
     public function orderColumn($column)
     {
         $model = $this->getModel();
-        if (array_key_exists($column, $this->orderColumns())) {
-            return $this->orderColumns()[$column];
+        $columns = $this->orderColumns();
+        if (array_key_exists($column, $columns)) {
+            return $columns[$column];
         } elseif ($model->hasField($column)) {
             return $column;
         }
