@@ -5,12 +5,12 @@
         {% endif %}
         <li>
             {% if loop.last %}
-                {{ bc.name }}
+                {{ bc.name|trim }}
             {% else %}
                 {% if bc.url %}
-                    <a href="{{ bc.url }}">{{ bc.name }}</a>
+                    <a href="{{ bc.url }}">{{ bc.name|trim }}</a>
                 {% else %}
-                    {{ bc.name }}
+                    {{ bc.name|trim }}
                 {% endif %}
             {% endif %}
 
@@ -18,7 +18,7 @@
                 <nav class="children">
                 {% for item in bc.items %}
                     <li>
-                        <a href="{{ item.url }}">{{ item.name }}</a>
+                        <a href="{{ item.url }}">{{ item.name|trim }}</a>
                     </li>
                 {% endfor %}
                 </nav>
