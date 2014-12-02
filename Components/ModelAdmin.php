@@ -272,7 +272,7 @@ abstract class ModelAdmin
         $this->addBreadcrumb(
             Text::mbUcfirst($this->getVerboseName()),
             Mindy::app()->urlManager->reverse('admin.list', [
-                'module' => $model->getModuleName(),
+                'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort()
             ])
         );
@@ -403,18 +403,18 @@ abstract class ModelAdmin
         $model = $form->getInstance();
         if (array_key_exists('save_continue', $data)) {
             return ['admin.update', [
-                'module' => $model->getModuleName(),
+                'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort(),
                 'id' => $model->pk
             ]];
         } else if (array_key_exists('save_create', $data)) {
             return ['admin.create', [
-                'module' => $model->getModuleName(),
+                'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort()
             ]];
         } else {
             return ['admin.list', [
-                'module' => $model->getModuleName(),
+                'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort()
             ]];
         }

@@ -51,7 +51,7 @@ class AdminController extends BackendController
         }
 
         $admin->setParams($_GET);
-        $moduleName = $admin->getModel()->getModuleName();
+        $moduleName = $admin->getModule()->getId();
 
         $context = $admin->index();
         $out = $this->render($admin->indexTemplate, array_merge([
