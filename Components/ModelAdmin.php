@@ -302,6 +302,7 @@ abstract class ModelAdmin
         $formClass = $this->getUpdateForm();
         /* @var $form \Mindy\Form\ModelForm */
         $form = new $formClass([
+            'model' => $model,
             'instance' => $model
         ]);
 
@@ -363,7 +364,8 @@ abstract class ModelAdmin
         $formClass = $this->getCreateForm();
         /* @var $form \Mindy\Form\ModelForm */
         $form = new $formClass([
-            'instance' => $model
+            'model' => $model,
+            'instance' => $model,
         ]);
 
         if (!empty($data) && $form->populate($data, $files)->isValid() && $form->save()) {
