@@ -24,6 +24,9 @@
                             {% else %}
                                 {% set value = admin.getColumnValue(column, model) %}
                                 {% set field = model.getField(column) %}
+                                {% if field.className == 'Mindy\\Orm\\Fields\\HasManyField' or field.className == 'Mindy\\Orm\\Fields\\ManyToManyField' %}
+                                    {% continue %}
+                                {% endif %}
                                 {% if field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
                                     {% if value %}
                                         {{ t('Yes', 'admin') }}

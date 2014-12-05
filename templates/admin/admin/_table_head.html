@@ -8,26 +8,27 @@
         <th class="sorting"></th>
     {% endif %}
     {% for column in columns %}
-            {% if admin.orderColumn(column) %}
-                {% set order_column = admin.orderColumn(column) %}
-                {% set desc_order_column = '-' ~ order_column %}
+        {% set field = model.getField(column) %}
+        {% if admin.orderColumn(column) %}
+            {% set order_column = admin.orderColumn(column) %}
+            {% set desc_order_column = '-' ~ order_column %}
 
-                <th class="th-{{ column }} {% if currentOrder == order_column %}asc{% elseif currentOrder == order_column_desc %}desc{% endif %}">
-                    {% if currentOrder == order_column %}
-                        {% set order = desc_order_column %}
-                    {% else %}
-                        {% set order = order_column %}
-                    {% endif %}
+            <th class="th-{{ column }} {% if currentOrder == order_column %}asc{% elseif currentOrder == order_column_desc %}desc{% endif %}">
+                {% if currentOrder == order_column %}
+                    {% set order = desc_order_column %}
+                {% else %}
+                    {% set order = order_column %}
+                {% endif %}
 
-                    <a href="{% url 'admin.list' moduleName adminClass %}?order={{ order }}&search={{ request.getParam('search') }}&id={{ request.getParam('id') }}" data-column="{{ column }}">
-                        {{ admin.verboseName(column) }}
-                    </a>
-                </th>
-            {% else %}
-                <th class="th-{{ column }}">
+                <a href="{% url 'admin.list' moduleName adminClass %}?order={{ order }}&search={{ request.getParam('search') }}&id={{ request.getParam('id') }}" data-column="{{ column }}">
                     {{ admin.verboseName(column) }}
-                </th>
-            {% endif %}
+                </a>
+            </th>
+        {% else %}
+            <th class="th-{{ column }}">
+                {{ admin.verboseName(column) }}
+            </th>
+        {% endif %}
     {% endfor %}
     <th class="actions">
         {{ t('Actions', 'admin') }}
