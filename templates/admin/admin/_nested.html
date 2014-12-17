@@ -32,7 +32,7 @@
                                     {% else %}
                                         {{ t('No', 'admin') }}
                                     {% endif %}
-                                {% elif value in field.choices %}
+                                {% elif field.choices and value in field.choices %}
                                     {{ field.choices[value] }}
                                 {% else %}
                                     {{ value }}
