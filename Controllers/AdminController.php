@@ -35,10 +35,6 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
-        if ($this->can($module, $adminClass, 'list') === false) {
-            $this->error(403);
-        }
-
         $admin = new $className;
         if (is_string($admin->getModel()) && class_exists($admin->getModel()) === false) {
             $this->error(404);
@@ -104,10 +100,6 @@ class AdminController extends BackendController
         $className = $this->getAdminClassName($module, $adminClass);
         if ($className === null) {
             $this->error(404);
-        }
-
-        if ($this->can($module, $adminClass, 'info', ['pk' => $id]) === false) {
-            $this->error(403);
         }
 
         $admin = new $className();
@@ -184,10 +176,6 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
-        if ($this->can($module, $adminClass, 'create') === false) {
-            $this->error(403);
-        }
-
         /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
         $admin = new $className();
 
@@ -218,10 +206,6 @@ class AdminController extends BackendController
         $className = $this->getAdminClassName($module, $adminClass);
         if ($className === null) {
             $this->error(404);
-        }
-
-        if ($this->can($module, $adminClass, 'update', ['pk' => $id]) === false) {
-            $this->error(403);
         }
 
         /** @var \Modules\Admin\Components\ModelAdmin|\Modules\Admin\Components\NestedAdmin $admin */
@@ -256,29 +240,12 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
-        if ($this->can($module, $adminClass, 'delete', ['pk' => $id]) === false) {
-            $this->error(403);
-        }
-
         $admin = new $className();
         $admin->delete($id);
         $this->redirect(Mindy::app()->urlManager->reverse('admin.list', [
             'module' => $module,
             'adminClass' => $adminClass
         ]));
-    }
-
-    /**
-     * @param $module
-     * @param $adminClass
-     * @param $actionId
-     * @param array $params
-     * @return mixed
-     */
-    protected function can($module, $adminClass, $actionId, $params = [])
-    {
-        $code = $module . '.admin.' . strtolower($adminClass) . '.' . $actionId;
-        return Mindy::app()->user->can($code, $params);
     }
 
     /**
