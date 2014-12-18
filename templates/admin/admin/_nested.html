@@ -23,19 +23,23 @@
                                 </a>
                             {% else %}
                                 {% set value = admin.getColumnValue(column, model) %}
-                                {% set field = model.getField(column) %}
-                                {% if field.className == 'Mindy\\Orm\\Fields\\HasManyField' or field.className == 'Mindy\\Orm\\Fields\\ManyToManyField' %}
-
-                                {% elif field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
-                                    {% if value %}
-                                        {{ t('Yes', 'admin') }}
+                                {% set field = model.getField(column, false) %}
+                                {% if field %}
+                                    {% if field.className == 'Mindy\\Orm\\Fields\\HasManyField' or field.className == 'Mindy\\Orm\\Fields\\ManyToManyField' %}
+                                        {% continue %}
+                                        {% elif field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
+                                        {% if value %}
+                                            {{ t('Yes', 'admin') }}
+                                        {% else %}
+                                            {{ t('No', 'admin') }}
+                                        {% endif %}
+                                        {% elif field.choices and field.choices|has_key(value) %}
+                                        {{ field.choices[value] }}
                                     {% else %}
-                                        {{ t('No', 'admin') }}
+                                        {{ value }}
                                     {% endif %}
-                                {% elif field.choices and field.choices|has_key(value) %}
-                                    {{ field.choices[value] }}
                                 {% else %}
-                                    {{ value }}
+                                    {{ model|call(column) }}
                                 {% endif %}
                             {% endif %}
                         </td>

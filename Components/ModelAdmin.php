@@ -190,10 +190,6 @@ abstract class ModelAdmin
 
         $this->initBreadcrumbs($model);
 
-        if ($this->sortingColumn) {
-            $qs->order([$this->sortingColumn]);
-        }
-
         $currentOrder = null;
         if (isset($this->params['order'])) {
             $column = $this->params['order'];
@@ -205,6 +201,8 @@ abstract class ModelAdmin
                 $sort = "";
             }
             $qs = $qs->order([$sort . $column]);
+        } elseif ($this->sortingColumn) {
+            $qs->order([$this->sortingColumn]);
         }
 
         if (isset($this->params['search'])) {
