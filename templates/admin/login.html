@@ -9,17 +9,12 @@
     <section class="row">
         <section class="columns large-12">
             <h1>{{ t('Login', 'user') }}</h1>
-        </section>
 
-        <form action="" method="post">
-            <section class="columns large-12">
+            <form action="" method="post">
                 {% csrf_token %}
                 {{ form.asBlock()|raw }}
-            </section>
-
-            <section class="columns large-10">
                 <button type="submit" class="button">{{ t('Login', 'user') }}</button>
-            </section>
-        </form>
+            </form>
+        </section>
     </section>
 {% endblock %}
