@@ -7,6 +7,11 @@
 {% block content_class %}info{% endblock %}
 
 {% block content %}
+    <div class="row">
+        <div class="large-12">
+            <a href="{% url 'admin.info_print' moduleName adminClass model.pk %}" class="button print-button">{{ t('Print', 'admin') }}</a>
+        </div>
+    </div>
     <section class="model-info">
         {% for name, field in fields %}
             <section class="row">

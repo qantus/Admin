@@ -120,6 +120,35 @@ class AdminController extends BackendController
     }
 
     /**
+     * @param $module
+     * @param $adminClass
+     * @param $id
+     */
+    public function actionInfoPrint($module, $adminClass, $id)
+    {
+        $className = $this->getAdminClassName($module, $adminClass);
+        if ($className === null) {
+            $this->error(404);
+        }
+
+        $admin = new $className();
+        $moduleName = $admin->getModel()->getModuleName();
+        $context = $admin->info($id, $_GET);
+        $breadcrumbs = $this->formatBreadcrumbs($context['breadcrumbs'], $admin);
+        $this->setBreadcrumbs($breadcrumbs);
+        $this->convertBreadcrumbsToTitle($context['breadcrumbs']);
+
+        echo $this->render($admin->infoPrintTemplate, array_merge([
+            'actions' => $admin->getActions(),
+            'module' => $admin->getModule(),
+            'moduleName' => $moduleName,
+            'modelClass' => $admin->getModel()->classNameShort(),
+            'adminClass' => $adminClass,
+            'admin' => $admin,
+        ], $context));
+    }
+
+    /**
      * @param $admin
      * @return array
      */

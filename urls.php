@@ -41,6 +41,10 @@ return [
         'name' => 'info',
         'callback' => '\Modules\Admin\Controllers\AdminController:info'
     ],
+    '/info_print/{module:\w+}/{adminClass:\w+}/{id:\d+}' => [
+        'name' => 'info_print',
+        'callback' => '\Modules\Admin\Controllers\AdminController:infoPrint'
+    ],
     '/changepassword/{id:\d+}' => [
         'name' => 'changepassword',
         'callback' => '\Modules\Admin\Controllers\AuthController:changepassword'

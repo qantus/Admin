@@ -52,6 +52,10 @@ abstract class ModelAdmin
      * @var string
      */
     public $infoTemplate = 'admin/admin/info.html';
+    /**
+     * @var string
+     */
+    public $infoPrintTemplate = 'admin/admin/info_print.html';
 
     public function getCanCreate()
     {
@@ -321,6 +325,35 @@ abstract class ModelAdmin
     }
 
     public function info($pk, array $data = [])
+    {
+        $modelClass = $this->getModel();
+        $model = $modelClass::objects()->filter(['pk' => $pk])->get();
+
+        if (!is_string($modelClass)) {
+            $modelClass = get_class($model);
+        }
+        $this->initBreadcrumbs($model);
+
+        $fields = [];
+        foreach ($this->getInfoFields($model) as $fieldName) {
+            if ($fieldName === 'pk') {
+                $fieldName = $model::getPkName();
+            }
+            $fields[$fieldName] = $model->getField($fieldName);
+        }
+
+        return [
+            'admin' => $this,
+            'model' => $model,
+            'fields' => $fields,
+            'modelClass' => $modelClass,
+            'breadcrumbs' => array_merge($this->getBreadcrumbs(), [
+                ['name' => (string)$model]
+            ])
+        ];
+    }
+
+    public function infoPrint($pk, array $data = [])
     {
         $modelClass = $this->getModel();
         $model = $modelClass::objects()->filter(['pk' => $pk])->get();
