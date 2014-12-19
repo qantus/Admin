@@ -41,6 +41,7 @@
             </aside>
 
             <section id="main">
+                <a id="hide-sidebar" rel="tooltip" title="{{ t('Hide / show sidebar', 'admin') }}" href="#">{{ t('Hide sidebar', 'admin') }}</a>
                 <section id="content" class="{% block content_class %}{% endblock %}">
                     {% block breadcrumbs %}
                         {% include "admin/_breadcrumbs.html" %}
@@ -79,6 +80,5 @@
         </section>
     </section>
 </section>
-<div class="sidebar-pusher"></div>
 </body>
 </html>

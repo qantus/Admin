@@ -36,5 +36,6 @@ return array(
     '{model} [[{url}|{name}]] was created' => 'Создано: {model} [[{url}|{name}]]',
     '{model} [[{url}|{name}]] was deleted' => 'Удалено: {model} [[{url}|{name}]]',
     'Print' => 'Печать',
-    'User actions' => 'Действия пользователей'
+    'User actions' => 'Действия пользователей',
+    'Hide / show sidebar' => 'Скрыть / показать панель'
 );
