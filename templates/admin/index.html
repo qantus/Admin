@@ -1,11 +1,11 @@
 {% extends "admin/base.html" %}
 
 {% block heading %}
-    <h1>Действия пользователей</h1>
+    <h1>{{ t('User actions', 'admin') }}</h1>
 {% endblock %}
 
 {% block content %}
-    <ul class="user-action-list">
+    <ul class="user-action-list admin">
         {% for message in messages %}
             <li>
                 <span class="datetime">{{ message.humanized_date }}</span>

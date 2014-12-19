@@ -6,8 +6,6 @@
     {%- if title or this.title -%}
         <title>{% if this.title %}{% for title in this.title %}{{ title }}{% if not loop.last %} - {% endif %}{% endfor %}{% else %}{{ title }}{% endif %}</title>
     {%- endif -%}
-    {#<link href='http://fonts.googleapis.com/css?family=PT+Sans:400,700&subset=latin,cyrillic' rel='stylesheet'#}
-          {#type='text/css'>#}
     <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
     <script src="/static_admin/dist/js/1.0.0.all.js"></script>
     <script type='application/javascript' src='/static_admin/dist/wysiwyg/tiny_mce.js'></script>
@@ -80,7 +78,7 @@
             </section>
         </section>
     </section>
-
 </section>
+<div class="sidebar-pusher"></div>
 </body>
 </html>

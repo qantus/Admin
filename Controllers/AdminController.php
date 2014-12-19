@@ -5,6 +5,7 @@ namespace Modules\Admin\Controllers;
 use Mindy\Base\Mindy;
 use Mindy\Base\Module;
 use Mindy\Pagination\Pagination;
+use Modules\Admin\AdminModule;
 use Modules\Admin\Components\ModelAdmin;
 use Modules\Core\Components\UserLog;
 use Modules\Core\Controllers\BackendController;
@@ -16,6 +17,8 @@ class AdminController extends BackendController
      */
     public function actionIndex()
     {
+        $this->addBreadcrumb(AdminModule::t('User actions'));
+
         $pager = new Pagination(UserLog::read(100));
         $messages = $pager->paginate();
         echo $this->render('admin/index.html', [
