@@ -495,7 +495,6 @@ abstract class ModelAdmin
     {
         $fields = $this->getSearchFields();
         if (isset($this->params['search']) && !empty($fields)) {
-            $filter = [];
             foreach ($fields as $field) {
                 $lookup = 'contains';
                 $field_name = $field;
@@ -503,9 +502,10 @@ abstract class ModelAdmin
                     $field_name = substr($field, 1);
                     $lookup = 'exact';
                 }
-                $filter[join('__', [$field_name, $lookup])] = $this->params['search'];
+                $qs->orFilter([
+                    join('__', [$field_name, $lookup]) => $this->params['search']
+                ]);
             }
-            return $qs->filter($filter);
         }
         return $qs;
     }
