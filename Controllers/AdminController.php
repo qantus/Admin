@@ -274,7 +274,7 @@ class AdminController extends BackendController
 
         $admin = new $className();
         $admin->delete($id);
-        $this->redirect(Mindy::app()->urlManager->reverse('admin.list', [
+        $this->redirect(Mindy::app()->urlManager->reverse('admin:list', [
             'module' => $module,
             'adminClass' => $adminClass
         ]));
@@ -291,7 +291,7 @@ class AdminController extends BackendController
         foreach ($menu['items'] as $menu) {
             $breadcrumbs[] = [
                 'name' => $menu['name'],
-                'url' => Mindy::app()->urlManager->reverse('admin.list', [
+                'url' => Mindy::app()->urlManager->reverse('admin:list', [
                         'module' => $module->getId(),
                         'adminClass' => $menu['adminClass']
                     ])

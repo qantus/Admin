@@ -41,7 +41,7 @@ class AuthController extends CoreController
     {
         parent::init();
 
-        $this->defaultRedirectUrl = Mindy::app()->urlManager->reverse('admin.index');
+        $this->defaultRedirectUrl = Mindy::app()->urlManager->reverse('admin:index');
 
         if (isset($_GET['redirectUrl'])) {
             Mindy::app()->auth->setReturnUrl($_GET['redirectUrl']);
@@ -58,7 +58,7 @@ class AuthController extends CoreController
                     'title'  => UserModule::t('You have successfully logged in to the site')
                 ));
             } else {
-                $this->r->redirect('admin.index');
+                $this->r->redirect('admin:index');
             }
         }
 
@@ -86,7 +86,7 @@ class AuthController extends CoreController
         }
 
         $auth->logout();
-        $this->r->redirect('admin.login');
+        $this->r->redirect('admin:login');
     }
 
     public function actionChangepassword($id)
@@ -106,7 +106,7 @@ class AuthController extends CoreController
             'module' => User::getModuleName(),
             'adminClass' => $admin->classNameShort()
         ]));
-        $this->addBreadcrumb((string) $model, Mindy::app()->urlManager->reverse('admin.update', [
+        $this->addBreadcrumb((string) $model, Mindy::app()->urlManager->reverse('admin:update', [
             'module' => User::getModuleName(),
             'adminClass' => $admin->classNameShort(),
             'id' => $id

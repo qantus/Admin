@@ -10,7 +10,7 @@
             <li>
                 <span class="datetime">{{ message.humanized_date }}</span>
                 {% if message.username != 'Guest' %}
-                    <span class="user"><a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a></span>
+                    <span class="user"><a href="{% url 'user:view' message.user_id %}">{{ message.username }}</a></span>
                 {% endif %}
                 <span class="message">{{ message.message|safe }}</span>
             </li>

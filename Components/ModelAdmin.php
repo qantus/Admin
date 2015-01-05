@@ -273,7 +273,7 @@ abstract class ModelAdmin
 
         $this->addBreadcrumb(
             Text::mbUcfirst($this->getVerboseName()),
-            Mindy::app()->urlManager->reverse('admin.list', [
+            Mindy::app()->urlManager->reverse('admin:list', [
                 'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort()
             ])
@@ -435,18 +435,18 @@ abstract class ModelAdmin
     {
         $model = $form->getInstance();
         if (array_key_exists('save_continue', $data)) {
-            return ['admin.update', [
+            return ['admin:update', [
                 'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort(),
                 'id' => $model->pk
             ]];
         } else if (array_key_exists('save_create', $data)) {
-            return ['admin.create', [
+            return ['admin:create', [
                 'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort()
             ]];
         } else {
-            return ['admin.list', [
+            return ['admin:list', [
                 'module' => $this->getModule()->getId(),
                 'adminClass' => $this->classNameShort()
             ]];
@@ -464,7 +464,7 @@ abstract class ModelAdmin
             }
         }
 
-        $this->redirect('admin.list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
+        $this->redirect('admin:list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
     }
 
     public function sorting(array $data = [])
@@ -483,7 +483,7 @@ abstract class ModelAdmin
         if (Mindy::app()->request->getIsAjax()) {
             Mindy::app()->controller->json(['success' => true]);
         } else {
-            $this->redirect('admin.list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
+            $this->redirect('admin:list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
         }
     }
 

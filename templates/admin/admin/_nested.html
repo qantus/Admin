@@ -18,7 +18,7 @@
                     {% for column in columns %}
                         <td{% if loop.first %} class="td-id" align="left"{% endif %}>
                             {% if admin.nestedColumn == column and not model.isLeaf() %}
-                                <a href="{% url 'admin.list_nested' moduleName adminClass model.pk  %}">
+                                <a href="{% url 'admin:list_nested' moduleName adminClass model.pk  %}">
                                     {{ admin.getColumnValue(column, model) }}
                                 </a>
                             {% else %}

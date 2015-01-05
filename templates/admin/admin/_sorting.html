@@ -3,8 +3,8 @@
         $("#table-main tbody").sortable({
             axis: 'y',
             placeholder: "highlight",
-            helper: function(e, ui) {
-                ui.children().each(function() {
+            helper: function (e, ui) {
+                ui.children().each(function () {
                     var $this = $(this);
                     $this.width($this.width());
                 });
@@ -12,11 +12,11 @@
             },
             update: function (event, ui) {
                 var $to = $(ui.item),
-                    $prev = $to.prev(),
-                    $next = $to.next();
+                        $prev = $to.prev(),
+                        $next = $to.next();
 
                 var data = $(this).sortable('toArray', {
-                    attribute : 'data-pk'
+                    attribute: 'data-pk'
                 });
 
                 $.ajax({
@@ -29,7 +29,7 @@
                     },
                     type: 'POST',
                     url: '',
-                    success: function(data) {
+                    success: function (data) {
                         $('#main-form').replaceWith(data);
                     }
                 });

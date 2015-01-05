@@ -9,7 +9,7 @@
                 <p class="datetime">{{ message.humanized_date }}</p>
                 <p>
                     {% if message.username != 'Guest' %}
-                        <a href="{% url 'user.view' message.user_id %}">{{ message.username }}</a>:
+                        <a href="{% url 'user:view' message.user_id %}">{{ message.username }}</a>:
                     {% endif %}
                     {{ message.message|safe }}
                 </p>

@@ -21,18 +21,18 @@
                         <a href="/" target="_blank" rel="tooltip" title="{{ t('Open site', 'admin') }}">
                             <i class="icon-link"></i>
                         </a>
-                        <a href="{% url 'admin.changepassword' user.pk %}" rel="tooltip" title="{{ t('Change password', 'user') }}">
+                        <a href="{% url 'admin:changepassword' user.pk %}" rel="tooltip" title="{{ t('Change password', 'user') }}">
                             <i class="icon-key"></i>
                         </a>
-                        <a href="{% url 'core.settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
+                        <a href="{% url 'core:settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
                             <i class="icon-settings"></i>
                         </a>
-                        <a href="{% url 'admin.logout' %}" rel="tooltip" title="{{ t('Logout', 'user') }}">
+                        <a href="{% url 'admin:logout' %}" rel="tooltip" title="{{ t('Logout', 'user') }}">
                             <i class="icon-logout"></i>
                         </a>
                     </nav>
 
-                    <h1 id="logo"><a href="{% url 'admin.index' %}"><i class="icon-mindy"></i> {{ get_version }}</a></h1>
+                    <h1 id="logo"><a href="{% url 'admin:index' %}"><i class="icon-mindy"></i> {{ get_version }}</a></h1>
                 </header>
 
                 <nav id="sidebar-menu">

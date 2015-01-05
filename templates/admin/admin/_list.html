@@ -18,7 +18,7 @@
                     {% for column in columns %}
                         <td{% if loop.first %} class="td-id" align="left"{% endif %}>
                             {% if loop.first %}
-                                <a href="{% url 'admin.update' moduleName adminClass model.pk %}">
+                                <a href="{% url 'admin:update' moduleName adminClass model.pk %}">
                                     {{ admin.getColumnValue(column, model) }}
                                 </a>
                             {% else %}

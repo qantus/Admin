@@ -3,7 +3,7 @@
         <span>
             {% if item.items %}
                 {% set first = item.items|first %}
-                <a class="module-name" href="{% if first.url %}{% url first.url item.module first.adminClass %}{% else %}{% url 'admin.list' item.module first.adminClass %}{% endif %}">
+                <a class="module-name" href="{% if first.url %}{% url first.url|lower item.module first.adminClass %}{% else %}{% url 'admin:list' item.module first.adminClass %}{% endif %}">
             {% else %}
                 <span class="module-name">
             {% endif %}
@@ -22,7 +22,7 @@
             <ul>
                 {% for child in item.items %}
                     <li>
-                        <a href="{% if child.url %}{% url child.url item.module child.adminClass %}{% else %}{% url 'admin.list' item.module child.adminClass %}{% endif %}">
+                        <a href="{% if child.url %}{% url child.url item.module child.adminClass %}{% else %}{% url 'admin:list' item.module child.adminClass %}{% endif %}">
                             {{ child.name }}
                         </a>
                     </li>

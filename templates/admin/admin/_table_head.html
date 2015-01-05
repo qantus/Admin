@@ -20,7 +20,7 @@
                     {% set order = order_column %}
                 {% endif %}
 
-                <a href="{% url 'admin.list' moduleName adminClass %}?order={{ order }}&search={{ request.getParam('search') }}&id={{ request.getParam('id') }}" data-column="{{ column }}">
+                <a href="{% url 'admin:list' moduleName adminClass %}?order={{ order }}&search={{ request.getParam('search') }}&id={{ request.getParam('id') }}" data-column="{{ column }}">
                     {{ admin.verboseName(column) }}
                 </a>
             </th>
