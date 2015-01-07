@@ -55,7 +55,7 @@ class AuthController extends CoreController
             if ($this->r->isAjax) {
                 echo $this->json(array(
                     'status' => 'success',
-                    'title'  => UserModule::t('You have successfully logged in to the site')
+                    'title' => UserModule::t('You have successfully logged in to the site')
                 ));
             } else {
                 $this->r->redirect('admin:index');
@@ -97,7 +97,7 @@ class AuthController extends CoreController
         }
 
         $model = User::objects()->filter(['pk' => $id])->get();
-        if($model === null) {
+        if ($model === null) {
             $this->error(404);
         }
 
@@ -106,7 +106,7 @@ class AuthController extends CoreController
             'module' => User::getModuleName(),
             'adminClass' => $admin->classNameShort()
         ]));
-        $this->addBreadcrumb((string) $model, Mindy::app()->urlManager->reverse('admin:update', [
+        $this->addBreadcrumb((string)$model, Mindy::app()->urlManager->reverse('admin:update', [
             'module' => User::getModuleName(),
             'adminClass' => $admin->classNameShort(),
             'id' => $id
@@ -114,7 +114,7 @@ class AuthController extends CoreController
         $this->addBreadcrumb(UserModule::t('Change password'));
 
         $form = new ChangePasswordForm(['model' => $model]);
-        if($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
+        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
             $this->r->flash->success(UserModule::t('Password changed'));
             $this->r->http->refresh();
         }
