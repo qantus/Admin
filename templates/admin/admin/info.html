@@ -9,7 +9,7 @@
 {% block content %}
     <div class="row">
         <div class="large-12">
-            <a href="{% url 'admin.info_print' moduleName adminClass model.pk %}" target="_blank" class="window-open button print-button">{{ t('Print', 'admin') }}</a>
+            <a href="{% url 'admin:info_print' moduleName adminClass model.pk %}" target="_blank" class="window-open button print-button">{{ t('Print', 'admin') }}</a>
         </div>
     </div>
     <section class="model-info">
