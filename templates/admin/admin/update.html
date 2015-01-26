@@ -14,15 +14,22 @@
 
         <div class="buttons-block">
             <input type="submit" class="button" name="save" value="{{ t('Save', 'admin') }}"/>
-            <input type="submit" class="button transparent" name="save_continue" value="{{ t('Save and continue', 'admin') }}"/>
-            <input type="submit" class="button transparent" name="save_create" value="{{ t('Save and create', 'admin') }}"/>
+            <input type="submit" class="button transparent" name="save_continue"
+                   value="{{ t('Save and continue', 'admin') }}"/>
+            <input type="submit" class="button transparent" name="save_create"
+                   value="{{ t('Save and create', 'admin') }}"/>
 
             {% if model %}
                 <div class="right">
                     {% if method_exists(model, "getAbsoluteUrl") %}
-                        <a class="button transparent" href="{{ form.getInstance().getAbsoluteUrl() }}" target="_blank">{{ t('View at site', 'admin') }}</a>
+                        <a class="button transparent" href="{{ form.getInstance().getAbsoluteUrl() }}"
+                           target="_blank">{{ t('View at site', 'admin') }}</a>
                     {% endif %}
-                    <input type="submit" class="button transparent" data-confirm="Вы действительно хотите удалить?" name="delete" value="{{ t('Delete', 'admin') }}"/>
+                    <a class="button transparent"
+                       data-confirm="{{ t('Do you really want to delete this item?', 'admin') }}"
+                       href="{% url 'admin:delete' module adminClass form.getInstance().pk %}">
+                        {{ t('Delete', 'admin') }}
+                    </a>
                 </div>
             {% endif %}
         </div>
