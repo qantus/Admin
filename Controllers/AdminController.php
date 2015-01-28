@@ -5,25 +5,31 @@ namespace Modules\Admin\Controllers;
 use Mindy\Base\Mindy;
 use Mindy\Base\Module;
 use Mindy\Pagination\Pagination;
-use Modules\Admin\AdminModule;
 use Modules\Admin\Components\ModelAdmin;
-use Modules\Core\Components\UserLog;
 use Modules\Core\Controllers\BackendController;
+use Modules\Core\Models\UserLog;
+use Modules\Core\Tables\UserLogTable;
 
 class AdminController extends BackendController
 {
+    public function actionEditor()
+    {
+        echo $this->render("admin/editor.html");
+    }
+
     /**
      * @return string
      */
     public function actionIndex()
     {
-        $this->addBreadcrumb(AdminModule::t('User actions'));
+        $module = $this->getModule();
+        $this->addBreadcrumb($module->t('User actions'));
+        $this->addTitle($module->t('User actions'));
 
-        $pager = new Pagination(UserLog::read(100));
-        $messages = $pager->paginate();
+        $qs = UserLog::objects()->order(['-created_at']);
+        $table = new UserLogTable($qs);
         echo $this->render('admin/index.html', [
-            'messages' => $messages,
-            'pager' => $pager
+            'table' => $table,
         ]);
     }
 
@@ -292,9 +298,9 @@ class AdminController extends BackendController
             $breadcrumbs[] = [
                 'name' => $menu['name'],
                 'url' => Mindy::app()->urlManager->reverse('admin:list', [
-                        'module' => $module->getId(),
-                        'adminClass' => $menu['adminClass']
-                    ])
+                    'module' => $module->getId(),
+                    'adminClass' => $menu['adminClass']
+                ])
             ];
         }
         return $breadcrumbs;

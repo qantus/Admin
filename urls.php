@@ -5,6 +5,10 @@ return [
         'name' => 'index',
         'callback' => '\Modules\Admin\Controllers\AdminController:index'
     ],
+    '/editor' => [
+        'name' => 'editor',
+        'callback' => '\Modules\Admin\Controllers\AdminController:editor'
+    ],
     '/auth/login' => [
         'name' => 'login',
         'callback' => '\Modules\Admin\Controllers\AuthController:login'

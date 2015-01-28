@@ -7,7 +7,15 @@
         <title>{% if this.title %}{% for title in this.title %}{{ title }}{% if not loop.last %} - {% endif %}{% endfor %}{% else %}{{ title }}{% endif %}</title>
     {%- endif -%}
     <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
+    <script type="text/javascript">
+        CKEDITOR_BASEPATH = '/static_admin/vendor/ckeditor/';
+    </script>
     <script src="/static_admin/dist/js/1.0.0.all.js"></script>
+    <script type="text/javascript">
+//        CKEDITOR.disableAutoInline = true;
+        CKEDITOR.config.skin = 'moono-dark,/mindy/dist/';
+        CKEDITOR.config.contentsCss = "/mindy/dist/content.css";
+    </script>
     <script type='application/javascript' src='/static_admin/dist/wysiwyg/tiny_mce.js'></script>
 </head>
 <body>
