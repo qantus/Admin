@@ -1,0 +1,16 @@
+{% extends "admin/base.html" %}
+
+{% block content %}
+    <textarea id="editor">
+        <h1>Hello world!</h1>
+    </textarea>
+    <script type="text/javascript">
+        CKEDITOR.replace('editor');
+    </script>
+
+    <hr/>
+
+    <div id="editor-inline" contenteditable="true">
+        <h1>Hello world!</h1>
+    </div>
+{% endblock %}
