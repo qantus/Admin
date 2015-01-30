@@ -31,7 +31,7 @@ abstract class NestedAdmin extends ModelAdmin
             $qs = $modelClass::objects()->filter(['pk' => $this->params['id']]);
             $model = $qs->get();
             return $model->{$this->nestedColumn};
-        }else{
+        } else {
             return parent::getVerboseNameList();
         }
     }
@@ -62,7 +62,7 @@ abstract class NestedAdmin extends ModelAdmin
 
         $this->initBreadcrumbs($model);
 
-        if($this->sortingColumn) {
+        if ($this->sortingColumn) {
             $qs->order(is_array($this->sortingColumn) ? $this->sortingColumn : [$this->sortingColumn]);
         }
 
@@ -128,7 +128,7 @@ abstract class NestedAdmin extends ModelAdmin
 
     public function sorting(array $data = [])
     {
-        if(!isset($data['pk'])) {
+        if (!isset($data['pk'])) {
             throw new Exception("Failed to receive primary key");
         }
 
@@ -137,11 +137,11 @@ abstract class NestedAdmin extends ModelAdmin
 
         /** @var \Mindy\Orm\TreeModel $model */
         $model = $modelClass::objects()->filter(['pk' => $data['pk']])->get();
-        if(!$model) {
+        if (!$model) {
             throw new Exception("Model not found");
         }
 
-        if($model->getIsRoot()) {
+        if ($model->getIsRoot()) {
             $roots = $modelClass::objects()->roots()->all();
 
             $models = $data['models'];
@@ -151,22 +151,22 @@ abstract class NestedAdmin extends ModelAdmin
                 $modelClass::objects()->filter(['pk' => $pk])->update(['root' => $position]);
             }
 
-            foreach($roots as $root) {
+            foreach ($roots as $root) {
                 $root->objects()->descendants()->filter([
                     'level__gt' => 1
                 ])->update(['root' => $dataPk[$root->pk]]);
             }
         } else {
             $target = null;
-            if(isset($data['insertBefore'])) {
+            if (isset($data['insertBefore'])) {
                 $target = $modelClass::objects()->filter(['pk' => $data['insertBefore']])->get();
-                if(!$target) {
+                if (!$target) {
                     throw new Exception("Target not found");
                 }
                 $model->moveBefore($target);
-            } else if(isset($data['insertAfter'])) {
+            } else if (isset($data['insertAfter'])) {
                 $target = $modelClass::objects()->filter(['pk' => $data['insertAfter']])->get();
-                if(!$target) {
+                if (!$target) {
                     throw new Exception("Target not found");
                 }
                 $model->moveAfter($target);
