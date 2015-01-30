@@ -5,7 +5,7 @@
         <label class="checkbox-state" for="check-all"></label>
     </th>
     {% if sortingColumn %}
-        <th class="sorting"></th>
+        <th class="sorting"><i class="icon-menu"></i></th>
     {% endif %}
     {% for column in columns %}
         {% set field = model.getField(column) %}
