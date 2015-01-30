@@ -13,6 +13,7 @@ use Mindy\Orm\Model;
 use Mindy\Orm\QuerySet;
 use Mindy\Pagination\Pagination;
 use Modules\Admin\AdminModule;
+use Modules\Admin\Tables\AdminTable;
 use Modules\Core\CoreModule;
 use Modules\Meta\Components\MetaTrait;
 
@@ -192,6 +193,16 @@ abstract class ModelAdmin
         /* @var $qs \Mindy\Orm\QuerySet */
         $qs = $this->getQuerySet($model);
 
+        $filterForm = null;
+        $filterFormClass = $this->getFilterForm();
+        if ($filterFormClass) {
+            $filterForm = new $filterFormClass();
+            $attrs = $filterForm->populate($_GET)->getQsFilter();
+            if (!empty($attrs)) {
+                $qs->filter($attrs);
+            }
+        }
+
         $this->initBreadcrumbs($model);
 
         $currentOrder = null;
@@ -220,11 +231,20 @@ abstract class ModelAdmin
             'columns' => $this->getColumns(),
             'models' => $models,
             'pager' => $pager,
+            'filterForm' => $filterForm,
             'breadcrumbs' => $this->getBreadcrumbs(),
             'currentOrder' => $currentOrder,
             'sortingColumn' => $this->sortingColumn,
             'searchFields' => $this->getSearchFields()
         ];
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getFilterForm()
+    {
+        return null;
     }
 
     /**
