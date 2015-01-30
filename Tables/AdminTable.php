@@ -58,6 +58,15 @@ class AdminTable extends Table
         $adminClass = $admin->classNameShort();
         $moduleName = $this->moduleName;
 
+        $rawColumns = [];
+        foreach($this->_dynamicColumns as $column) {
+            $rawColumns[$column] = [
+                'class' => DefaultColumn::className(),
+                'name' => $column,
+                'admin' => $admin
+            ];
+        }
+
         $columns = array_merge([
             'pk' => [
                 'class' => LinkColumn::className(),
@@ -89,7 +98,7 @@ class AdminTable extends Table
                     }
                 }
             ]
-        ], $this->_dynamicColumns);
+        ], $rawColumns);
 
         if ($this->sortingColumn) {
             $columns = array_merge([
@@ -114,6 +123,7 @@ class AdminTable extends Table
             'actions' => [
                 'class' => TemplateColumn::className(),
                 'template' => "admin/admin/_actions.html",
+                'title' => '',
                 'html' => [
                     'class' => 'actions'
                 ],
