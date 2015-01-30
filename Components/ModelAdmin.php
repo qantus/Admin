@@ -57,6 +57,15 @@ abstract class ModelAdmin
      * @var string
      */
     public $infoPrintTemplate = 'admin/admin/info_print.html';
+    /**
+     * @var string
+     */
+    protected $moduleName;
+
+    public function setModuleName($name)
+    {
+        $this->moduleName = $name;
+    }
 
     public function getCanCreate()
     {
@@ -225,13 +234,16 @@ abstract class ModelAdmin
             $qs = $this->search($qs);
         }
 
-        $pager = new Pagination($qs);
-        $models = $pager->paginate();
+        $table = new AdminTable($qs, [
+            'admin' => $this,
+            'sortingColumn' => $this->sortingColumn,
+            'moduleName' => $this->moduleName,
+            'columns' => $this->getColumns()
+        ]);
 
         return [
             'columns' => $this->getColumns(),
-            'models' => $models,
-            'pager' => $pager,
+            'table' => $table,
             'filterForm' => $filterForm,
             'breadcrumbs' => $this->getBreadcrumbs(),
             'currentOrder' => $currentOrder,

@@ -10,6 +10,9 @@
     {% include 'admin/admin/_toolbar.html' %}
 
     <section id="list" data-path="{{ request.getPath() }}">
+        {{ table.render()|safe }}
+
+        {% comment %}
         <table id="table-main" data-toggle="checkboxes" data-range="true">
             {% include "admin/admin/_table_head.html" %}
             <tbody>
@@ -40,7 +43,7 @@
                                         {% else %}
                                             {{ t('No', 'admin') }}
                                         {% endif %}
-                                        {% elif field.choices and field.choices|has_key(value) %}
+                                    {% elif field.choices and field.choices|has_key(value) %}
                                         {{ field.choices[value] }}
                                     {% else %}
                                         {{ value }}
@@ -59,6 +62,7 @@
             </tbody>
         </table>
         {{ pager.render("admin/admin/_pager.html")|raw }}
+        {% endcomment %}
     </section>
 </form>
 {% include "admin/admin/_sorting.html" %}

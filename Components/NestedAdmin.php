@@ -5,6 +5,7 @@ namespace Modules\Admin\Components;
 use Exception;
 use Mindy\Base\Mindy;
 use Mindy\Pagination\Pagination;
+use Modules\Admin\Tables\AdminTable;
 
 /**
  * All rights reserved.
@@ -81,13 +82,21 @@ abstract class NestedAdmin extends ModelAdmin
 
         $qs = $this->search($qs);
 
-        $pager = new Pagination($qs);
-        $models = $pager->paginate();
+        $table = new AdminTable($qs, [
+            'admin' => $this,
+            'moduleName' => $this->moduleName,
+            'sortingColumn' => $this->sortingColumn,
+            'columns' => $this->getColumns()
+        ]);
+
+//        $pager = new Pagination($qs);
+//        $models = $pager->paginate();
 
         return [
             'columns' => $this->getColumns(),
-            'models' => $models,
-            'pager' => $pager,
+            'table' => $table,
+//            'models' => $models,
+//            'pager' => $pager,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), $this->getParentBreadcrumbs($model)),
             'sortingColumn' => $this->sortingColumn,
             'currentOrder' => $currentOrder,

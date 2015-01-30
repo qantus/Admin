@@ -44,7 +44,7 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
-        $admin = new $className;
+        $admin = new $className(['moduleName' => $module]);
         if (is_string($admin->getModel()) && class_exists($admin->getModel()) === false) {
             $this->error(404);
         }

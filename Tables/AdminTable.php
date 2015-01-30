@@ -13,25 +13,39 @@
 
 namespace Modules\Admin\Tables;
 
+use Mindy\Base\Mindy;
+use Mindy\Orm\TreeModel;
+use Mindy\Table\Columns\LinkColumn;
 use Mindy\Table\Columns\TemplateColumn;
 use Mindy\Table\Table;
 use Modules\Admin\Components\ModelAdmin;
 
 class AdminTable extends Table
 {
-    private $_dynamicColumns = [];
     /**
-     * @var ModelAdmin
+     * @var string
      */
-    protected $admin;
-
+    public $moduleName;
+    /**
+     * @var string
+     */
     public $sortingColumn;
-
+    /**
+     * @var array
+     */
     public $html = [
         'id' => 'table-main',
         'data-toggle' => 'checkboxes',
         'data-range' => 'true'
     ];
+    /**
+     * @var ModelAdmin
+     */
+    protected $admin;
+    /**
+     * @var array
+     */
+    private $_dynamicColumns = [];
 
     public function setAdmin(ModelAdmin $admin)
     {
@@ -40,7 +54,63 @@ class AdminTable extends Table
 
     public function getColumns()
     {
-        $columns = array_merge($this->_dynamicColumns, [
+        $admin = $this->admin;
+        $adminClass = $admin->classNameShort();
+        $moduleName = $this->moduleName;
+
+        $columns = array_merge([
+            'pk' => [
+                'class' => LinkColumn::className(),
+                'html' => [
+                    'class' => 'td-id',
+                    'align' => 'left'
+                ],
+                'route' => function($record) use ($moduleName, $adminClass) {
+                    // 'admin:update' moduleName adminClass model.pk
+                    // 'admin:list_nested' moduleName adminClass model.pk
+
+                    $urlManager = Mindy::app()->urlManager;
+                    if (is_a($record, TreeModel::className())) {
+                        if ($record->isLeaf() === false) {
+                            return $urlManager->reverse('admin:list_nested', [
+                                'moduleName' => $moduleName,
+                                'adminClass' => $adminClass,
+                                'pk' => $record->pk
+                            ]);
+                        } else {
+                            return null;
+                        }
+                    } else {
+                        return Mindy::app()->urlManager->reverse('admin:update', [
+                            'moduleName' => $moduleName,
+                            'adminClass' => $adminClass,
+                            'pk' => $record->pk
+                        ]);
+                    }
+                }
+            ]
+        ], $this->_dynamicColumns);
+
+        if ($this->sortingColumn) {
+            $columns = array_merge([
+                'check' => [
+                    'class' => CheckColumn::className(),
+                    'length' => $this->count()
+                ],
+                'sorting' => [
+                    'class' => SortingColumn::className(),
+                ]
+            ], $columns);
+        } else {
+            $columns = array_merge([
+                'check' => [
+                    'class' => CheckColumn::className(),
+                    'length' => $this->count()
+                ],
+            ], $columns);
+        }
+
+        $columns = array_merge($columns, [
             'actions' => [
                 'class' => TemplateColumn::className(),
                 'template' => "admin/admin/_actions.html",
@@ -48,33 +118,13 @@ class AdminTable extends Table
                     'class' => 'actions'
                 ],
                 'extra' => [
-                    'admin' => $this->admin,
-                    'adminClass' => $this->admin->classNameShort(),
-                    'moduleName' => $this->admin->getModule()->classNameShort()
+                    'admin' => $admin,
+                    'adminClass' => $adminClass,
+                    'moduleName' => $moduleName
                 ],
                 'virtual' => true
             ]
         ]);
-
-        $columns = array_merge([
-            'check' => [
-                'class' => CheckColumn::className(),
-                'length' => $this->count()
-            ]
-        ], $columns);
-
-        if ($this->sortingColumn) {
-            $columns = array_merge([
-                'sorting' => [
-                    'class' => CheckColumn::className(),
-                    'template' => "admin/admin/_sorting_column.html",
-                    'html' => [
-                        'class' => 'sorting',
-                    ],
-                    'virtual' => true
-                ]
-            ], $columns);
-        }
 
         return $columns;
     }
@@ -91,6 +141,9 @@ class AdminTable extends Table
         ];
     }
 
+    /**
+     * @param array $columns
+     */
     public function setColumns(array $columns)
     {
         $this->_dynamicColumns = $columns;
