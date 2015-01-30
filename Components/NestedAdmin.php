@@ -49,6 +49,17 @@ abstract class NestedAdmin extends ModelAdmin
             $qs = $model->objects()->roots();
         }
 
+        $filterForm = null;
+        $filterFormClass = $this->getFilterForm();
+        if ($filterFormClass) {
+            $filterForm = new $filterFormClass();
+            $filterForm->populate($_GET);
+            $attrs = $filterForm->getQsFilter();
+            if (!empty($attrs)) {
+                $qs->filter($attrs);
+            }
+        }
+
         $this->initBreadcrumbs($model);
 
         if($this->sortingColumn) {

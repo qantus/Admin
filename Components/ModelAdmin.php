@@ -197,7 +197,8 @@ abstract class ModelAdmin
         $filterFormClass = $this->getFilterForm();
         if ($filterFormClass) {
             $filterForm = new $filterFormClass();
-            $attrs = $filterForm->populate($_GET)->getQsFilter();
+            $filterForm->populate($_GET);
+            $attrs = $filterForm->getQsFilter();
             if (!empty($attrs)) {
                 $qs->filter($attrs);
             }
