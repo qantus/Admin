@@ -238,7 +238,8 @@ abstract class ModelAdmin
             'admin' => $this,
             'sortingColumn' => $this->sortingColumn,
             'moduleName' => $this->moduleName,
-            'columns' => $this->getColumns()
+            'columns' => $this->getColumns(),
+            'currentOrder' => $currentOrder,
         ]);
 
         return [

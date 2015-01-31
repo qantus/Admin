@@ -1,8 +1,8 @@
 {% if filterForm %}
-<form id="filter-form" action="{{ request.getPath() }}">
-    {{ filterForm|safe }}
-    <input type="submit" class="button" value="{{ t('Search', 'admin') }}"/>
-</form>
+    <form id="filter-form" action="{{ request.getPath() }}">
+        {{ filterForm|safe }}
+        <input type="submit" class="button" value="{{ t('Search', 'admin') }}"/>
+    </form>
 {% endif %}
 
 <form action="" method="post" id="main-form">
@@ -11,58 +11,5 @@
 
     <section id="list" data-path="{{ request.getPath() }}">
         {{ table.render()|safe }}
-
-        {% comment %}
-        <table id="table-main" data-toggle="checkboxes" data-range="true">
-            {% include "admin/admin/_table_head.html" %}
-            <tbody>
-            {% for model in models %}
-                <tr data-pk="{{ model.pk }}">
-                    <td class="check" align="left">
-                        <input type="checkbox" name="models[]" id="check-{{ model.pk }}" value="{{ model.pk }}" />
-                        <label class="checkbox-state" for="check-{{ model.pk }}"></label>
-                    </td>
-                    {% if sortingColumn %}
-                        <td class="sorting"><i class="icon-menu"></i></td>
-                    {% endif %}
-                    {% for column in columns %}
-                        <td{% if loop.first %} class="td-id" align="left"{% endif %}>
-                            {% if loop.first %}
-                                <a href="{% url 'admin:update' moduleName adminClass model.pk %}">
-                                    {{ admin.getColumnValue(column, model) }}
-                                </a>
-                            {% else %}
-                                {% set value = admin.getColumnValue(column, model) %}
-                                {% set field = model.getField(column, false) %}
-                                {% if field %}
-                                    {% if field.className == 'Mindy\\Orm\\Fields\\HasManyField' or field.className == 'Mindy\\Orm\\Fields\\ManyToManyField' %}
-                                        {% continue %}
-                                        {% elif field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
-                                        {% if value %}
-                                            {{ t('Yes', 'admin') }}
-                                        {% else %}
-                                            {{ t('No', 'admin') }}
-                                        {% endif %}
-                                    {% elif field.choices and field.choices|has_key(value) %}
-                                        {{ field.choices[value] }}
-                                    {% else %}
-                                        {{ value }}
-                                    {% endif %}
-                                {% else %}
-                                    {{ model|call(column) }}
-                                {% endif %}
-                            {% endif %}
-                        </td>
-                    {% endfor %}
-                    <td class="actions">
-                        {% include admin.actionsTemplate %}
-                    </td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-        {{ pager.render("admin/admin/_pager.html")|raw }}
-        {% endcomment %}
     </section>
 </form>
-{% include "admin/admin/_sorting.html" %}

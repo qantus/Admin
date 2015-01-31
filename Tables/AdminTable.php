@@ -39,6 +39,10 @@ class AdminTable extends Table
         'data-range' => 'true'
     ];
     /**
+     * @var string
+     */
+    public $currentOrder;
+    /**
      * @var ModelAdmin
      */
     protected $admin;
@@ -46,6 +50,13 @@ class AdminTable extends Table
      * @var array
      */
     private $_dynamicColumns = [];
+
+    public function init()
+    {
+        $this->html = array_merge($this->html, [
+            'class' => $this->sortingColumn ? 'sortingColumn' : ''
+        ]);
+    }
 
     public function setAdmin(ModelAdmin $admin)
     {
@@ -61,15 +72,21 @@ class AdminTable extends Table
         $rawColumns = [];
         foreach($this->_dynamicColumns as $column) {
             $rawColumns[$column] = [
-                'class' => DefaultColumn::className(),
+                'class' => AdminRawColumn::className(),
                 'name' => $column,
-                'admin' => $admin
+                'admin' => $admin,
+                'moduleName' => $moduleName,
+                'currentOrder' => $this->currentOrder
             ];
         }
 
         $columns = array_merge([
             'pk' => [
-                'class' => LinkColumn::className(),
+                'class' => AdminLinkColumn::className(),
+                'name' => $admin->getModel()->getPkName(),
+                'admin' => $admin,
+                'moduleName' => $moduleName,
+                'currentOrder' => $this->currentOrder,
                 'html' => [
                     'class' => 'td-id',
                     'align' => 'left'

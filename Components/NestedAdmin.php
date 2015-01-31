@@ -19,10 +19,13 @@ use Modules\Admin\Tables\AdminTable;
  */
 abstract class NestedAdmin extends ModelAdmin
 {
-    public $indexTemplate = 'admin/admin/_nested.html';
-
+    /**
+     * @var string
+     */
     public $nestedColumn = 'name';
-
+    /**
+     * @var array
+     */
     public $sortingColumn = ['root', 'lft'];
 
     public function getVerboseNameList()
