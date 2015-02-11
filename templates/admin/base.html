@@ -1,5 +1,9 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="ru"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="ru"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="ru"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -19,7 +23,6 @@
     <script type='application/javascript' src='/static_admin/dist/wysiwyg/tiny_mce.js'></script>
 </head>
 <body>
-{{ debug_panel() }}
 <section id="wrapper">
     <section id="base">
         <section id="base-line">
@@ -46,6 +49,8 @@
                 <nav id="sidebar-menu">
                     {% include 'admin/menu.html' %}
                 </nav>
+
+                {{ debug_panel() }}
             </aside>
 
             <section id="main">
