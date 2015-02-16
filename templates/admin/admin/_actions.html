@@ -17,7 +17,7 @@
 {% endif %}
 
 {% if 'delete' in admin.actionsList %}
-    <a class="action-delete" data-confirm="Вы действительно хотите удалить?" href="{% url 'admin:delete' moduleName adminClass record.pk %}">
+    <a class="action-delete" data-confirm="{{ t('Do you really want to delete this object?', 'core') }}" href="{% url 'admin:delete' moduleName adminClass record.pk %}?_next={{ request.path }}">
         <i class="icon-x"></i>
     </a>
 {% endif %}
