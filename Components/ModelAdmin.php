@@ -60,6 +60,10 @@ abstract class ModelAdmin
     /**
      * @var string
      */
+    public $linkColumn = 'pk';
+    /**
+     * @var string
+     */
     protected $moduleName;
 
     public function setModuleName($name)
@@ -240,6 +244,7 @@ abstract class ModelAdmin
             'moduleName' => $this->moduleName,
             'columns' => $this->getColumns(),
             'currentOrder' => $currentOrder,
+            'linkColumn' => $this->linkColumn
         ]);
 
         return [

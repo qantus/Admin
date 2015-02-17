@@ -89,17 +89,13 @@ abstract class NestedAdmin extends ModelAdmin
             'admin' => $this,
             'moduleName' => $this->moduleName,
             'sortingColumn' => $this->sortingColumn,
-            'columns' => $this->getColumns()
+            'columns' => $this->getColumns(),
+            'linkColumn' => $this->linkColumn
         ]);
-
-//        $pager = new Pagination($qs);
-//        $models = $pager->paginate();
 
         return [
             'columns' => $this->getColumns(),
             'table' => $table,
-//            'models' => $models,
-//            'pager' => $pager,
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), $this->getParentBreadcrumbs($model)),
             'sortingColumn' => $this->sortingColumn,
             'currentOrder' => $currentOrder,
