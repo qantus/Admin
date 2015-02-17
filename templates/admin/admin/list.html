@@ -5,10 +5,12 @@
 {% block heading %}
     <h1>
         {{ admin.getVerboseNameList() }}
+        {% if id %}
         <a class="admin-header-link" href="{% url 'admin:update' moduleName adminClass id %}">
             <i class="icon-edit"></i>
             {{ t('Update', 'admin') }}
         </a>
+        {% endif %}
     </h1>
 {% endblock %}
 
