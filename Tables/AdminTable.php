@@ -73,16 +73,7 @@ class AdminTable extends Table
         $adminClass = $admin->classNameShort();
         $moduleName = $this->moduleName;
 
-        $rawColumns = [];
-        foreach($this->_dynamicColumns as $column) {
-            $rawColumns[$column] = [
-                'class' => AdminRawColumn::className(),
-                'name' => $column,
-                'admin' => $admin,
-                'moduleName' => $moduleName,
-                'currentOrder' => $this->currentOrder
-            ];
-        }
+        $rawColumns = $this->_dynamicColumns;
 
         if ($this->linkColumn) {
             if (isset($rawColumns[$this->linkColumn])) {
@@ -114,6 +105,8 @@ class AdminTable extends Table
                     }
                 ]
             ], $rawColumns);
+        } else {
+            $columns = $rawColumns;
         }
 
         $columns = array_merge([
@@ -195,6 +188,18 @@ class AdminTable extends Table
      */
     public function setColumns(array $columns)
     {
-        $this->_dynamicColumns = $columns;
+        foreach($columns as $key => $value) {
+            if (is_numeric($key)) {
+                $this->_dynamicColumns[$value] = [
+                    'class' => AdminRawColumn::className(),
+                    'name' => $value,
+                    'admin' => $this->admin,
+                    'moduleName' => $this->moduleName,
+                    'currentOrder' => $this->currentOrder
+                ];
+            } else {
+                $this->_dynamicColumns[$key] = is_string($value) ? ['class' => $value] : $value;
+            }
+        }
     }
 }

@@ -248,7 +248,6 @@ abstract class ModelAdmin
         ]);
 
         return [
-            'columns' => $this->getColumns(),
             'table' => $table,
             'filterForm' => $filterForm,
             'breadcrumbs' => $this->getBreadcrumbs(),
