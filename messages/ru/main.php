@@ -37,5 +37,6 @@ return array(
     '{model} [[{url}|{name}]] was deleted' => 'Удалено: {model} [[{url}|{name}]]',
     'Print' => 'Печать',
     'User actions' => 'Действия пользователей',
-    'Hide / show sidebar' => 'Скрыть / показать панель'
+    'Hide / show sidebar' => 'Скрыть / показать панель',
+    'Last changes' => 'Последние изменения',
 );
