@@ -60,7 +60,7 @@ abstract class ModelAdmin
     /**
      * @var string
      */
-    public $linkColumn = 'pk';
+    public $linkColumn;
     /**
      * @var string
      */
