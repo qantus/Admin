@@ -244,7 +244,10 @@ abstract class ModelAdmin
             'moduleName' => $this->moduleName,
             'columns' => $this->getColumns(),
             'currentOrder' => $currentOrder,
-            'linkColumn' => $this->linkColumn
+            'linkColumn' => $this->linkColumn,
+            'paginationConfig' => [
+                'pageSize' => $this->pageSize
+            ]
         ]);
 
         return [
@@ -305,6 +308,11 @@ abstract class ModelAdmin
         return [];
     }
 
+    /**
+     * Формирование хлебных крошек. Модель используется в
+     * `NestedAdmin` для построения хлебных крошек в соответствии с деревом.
+     * @param $model
+     */
     public function initBreadcrumbs($model)
     {
         $this->addBreadcrumb($this->getModule()->getName());

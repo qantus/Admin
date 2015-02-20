@@ -90,7 +90,10 @@ abstract class NestedAdmin extends ModelAdmin
             'moduleName' => $this->moduleName,
             'sortingColumn' => $this->sortingColumn,
             'columns' => $this->getColumns(),
-            'linkColumn' => $this->linkColumn
+            'linkColumn' => $this->linkColumn,
+            'paginationConfig' => [
+                'pageSize' => $this->pageSize
+            ]
         ]);
 
         return [
