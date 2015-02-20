@@ -43,6 +43,10 @@ class AdminTable extends Table
      */
     public $currentOrder;
     /**
+     * @var string
+     */
+    public $linkColumn;
+    /**
      * @var ModelAdmin
      */
     protected $admin;
@@ -69,15 +73,40 @@ class AdminTable extends Table
         $adminClass = $admin->classNameShort();
         $moduleName = $this->moduleName;
 
-        $rawColumns = [];
-        foreach($this->_dynamicColumns as $column) {
-            $rawColumns[$column] = [
-                'class' => AdminRawColumn::className(),
-                'name' => $column,
-                'admin' => $admin,
-                'moduleName' => $moduleName,
-                'currentOrder' => $this->currentOrder
-            ];
+        $rawColumns = $this->_dynamicColumns;
+
+        if ($this->linkColumn) {
+            if (isset($rawColumns[$this->linkColumn])) {
+                unset($rawColumns[$this->linkColumn]);
+            }
+            $columns = array_merge([
+                $this->linkColumn => [
+                    'class' => AdminLinkColumn::className(),
+                    'name' => $this->linkColumn,
+                    'admin' => $admin,
+                    'moduleName' => $moduleName,
+                    'currentOrder' => $this->currentOrder,
+                    'html' => [
+                        'align' => 'left'
+                    ],
+                    'route' => function($record) use ($moduleName, $adminClass) {
+                        $urlManager = Mindy::app()->urlManager;
+                        if (is_a($record, TreeModel::className())) {
+                            if ($record->isLeaf() === false) {
+                                return $urlManager->reverse('admin:list_nested', [
+                                    'moduleName' => $moduleName,
+                                    'adminClass' => $adminClass,
+                                    'pk' => $record->pk
+                                ]);
+                            }
+                        }
+
+                        return null;
+                    }
+                ]
+            ], $rawColumns);
+        } else {
+            $columns = $rawColumns;
         }
 
         $columns = array_merge([
@@ -94,28 +123,14 @@ class AdminTable extends Table
                 'route' => function($record) use ($moduleName, $adminClass) {
                     // 'admin:update' moduleName adminClass model.pk
                     // 'admin:list_nested' moduleName adminClass model.pk
-
-                    $urlManager = Mindy::app()->urlManager;
-                    if (is_a($record, TreeModel::className())) {
-                        if ($record->isLeaf() === false) {
-                            return $urlManager->reverse('admin:list_nested', [
-                                'moduleName' => $moduleName,
-                                'adminClass' => $adminClass,
-                                'pk' => $record->pk
-                            ]);
-                        } else {
-                            return null;
-                        }
-                    } else {
-                        return Mindy::app()->urlManager->reverse('admin:update', [
-                            'moduleName' => $moduleName,
-                            'adminClass' => $adminClass,
-                            'pk' => $record->pk
-                        ]);
-                    }
+                    return Mindy::app()->urlManager->reverse('admin:update', [
+                        'moduleName' => $moduleName,
+                        'adminClass' => $adminClass,
+                        'pk' => $record->pk
+                    ]);
                 }
             ]
-        ], $rawColumns);
+        ], $columns);
 
         if ($this->sortingColumn) {
             $columns = array_merge([
@@ -173,6 +188,18 @@ class AdminTable extends Table
      */
     public function setColumns(array $columns)
     {
-        $this->_dynamicColumns = $columns;
+        foreach($columns as $key => $value) {
+            if (is_numeric($key)) {
+                $this->_dynamicColumns[$value] = [
+                    'class' => AdminRawColumn::className(),
+                    'name' => $value,
+                    'admin' => $this->admin,
+                    'moduleName' => $this->moduleName,
+                    'currentOrder' => $this->currentOrder
+                ];
+            } else {
+                $this->_dynamicColumns[$key] = is_string($value) ? ['class' => $value] : $value;
+            }
+        }
     }
 }

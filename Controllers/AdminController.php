@@ -77,9 +77,11 @@ class AdminController extends BackendController
         } else {
             echo $this->render('admin/admin/list.html', array_merge(['adminClass' => $adminClass], [
                 'module' => $admin->getModule(),
+                'moduleName' => $module,
                 'modelClass' => $admin->getModel(),
                 'out' => $out,
-                'admin' => $admin
+                'admin' => $admin,
+                'id' => isset($_GET['id']) ? $_GET['id'] : null
             ]));
         }
     }
@@ -262,7 +264,8 @@ class AdminController extends BackendController
 
         echo $this->render($admin->updateTemplate, array_merge([
             'module' => $module,
-            'adminClass' => $adminClass
+            'adminClass' => $adminClass,
+            'id' => $id
         ], $context));
     }
 
