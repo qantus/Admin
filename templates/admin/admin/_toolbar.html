@@ -7,7 +7,7 @@
 
             <div class="search-toolbar">
                 <i class="icon-search"></i>
-                <input type="text" name="search" placeholder="{{ t('Search','admin') }}..."/>
+                <input type="text" name="search" placeholder="{{ t('Search','admin') }}..." value="{{ request.get.get('search') }}"/>
                 <a class="exit-search" href="#"><i class="icon-x"></i></a>
             </div>
         {% endif %}
