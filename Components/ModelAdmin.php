@@ -146,6 +146,7 @@ abstract class ModelAdmin
      */
     public function getColumnValue($column, $model)
     {
+        list($column, $model) = $this->getChainedModel($column, $model);
         if ($column == 'pk') {
             $column = $model->getPkName();
         }
@@ -162,6 +163,24 @@ abstract class ModelAdmin
             }
         }
         return null;
+    }
+
+
+    public function getChainedModel($column, $model)
+    {
+        if (strpos($column, '__') !== false) {
+            $exploded = explode('__', $column);
+            $last = count($exploded) - 1;
+            $column = null;
+            foreach ($exploded as $key => $name) {
+                $value = $model->{$name};
+                $column = $name;
+                if ($key != $last && $value) {
+                    $model = $value;
+                }
+            }
+        }
+        return [$column, $model];
     }
 
     /**
