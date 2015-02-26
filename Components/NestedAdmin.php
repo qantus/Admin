@@ -142,7 +142,7 @@ abstract class NestedAdmin extends ModelAdmin
         if (!isset($data['pk'])) {
             throw new Exception("Failed to receive primary key");
         }
-//        d($data);
+
         /** @var \Mindy\Orm\TreeModel $modelClass */
         $modelClass = $this->getModel();
 
