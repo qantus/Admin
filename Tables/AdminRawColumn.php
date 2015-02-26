@@ -89,7 +89,7 @@ class AdminRawColumn extends Column
             } else if (!empty($field->choices) && array_key_exists($value, $field->choices)) {
                 return $field->choices[$value];
             } else {
-                return $value;
+                return (string) $value;
             }
         } else {
             return $record->{$this->name};
