@@ -242,8 +242,8 @@ abstract class ModelAdmin
             'admin' => $this,
             'sortingColumn' => $this->sortingColumn,
             'moduleName' => $this->moduleName,
-            'columns' => $this->getColumns(),
             'currentOrder' => $currentOrder,
+            'columns' => $this->getColumns(),
             'linkColumn' => $this->linkColumn,
             'paginationConfig' => [
                 'pageSize' => $this->pageSize

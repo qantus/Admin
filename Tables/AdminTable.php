@@ -15,7 +15,6 @@ namespace Modules\Admin\Tables;
 
 use Mindy\Base\Mindy;
 use Mindy\Orm\TreeModel;
-use Mindy\Table\Columns\LinkColumn;
 use Mindy\Table\Columns\TemplateColumn;
 use Mindy\Table\Table;
 use Modules\Admin\Components\ModelAdmin;
@@ -89,7 +88,7 @@ class AdminTable extends Table
                     'html' => [
                         'align' => 'left'
                     ],
-                    'route' => function($record) use ($moduleName, $adminClass) {
+                    'route' => function ($record) use ($moduleName, $adminClass) {
                         $urlManager = Mindy::app()->urlManager;
                         if (is_a($record, TreeModel::className())) {
                             if ($record->isLeaf() === false) {
@@ -120,7 +119,7 @@ class AdminTable extends Table
                     'class' => 'td-id',
                     'align' => 'left'
                 ],
-                'route' => function($record) use ($moduleName, $adminClass) {
+                'route' => function ($record) use ($moduleName, $adminClass) {
                     // 'admin:update' moduleName adminClass model.pk
                     // 'admin:list_nested' moduleName adminClass model.pk
                     return Mindy::app()->urlManager->reverse('admin:update', [
@@ -188,7 +187,7 @@ class AdminTable extends Table
      */
     public function setColumns(array $columns)
     {
-        foreach($columns as $key => $value) {
+        foreach ($columns as $key => $value) {
             if (is_numeric($key)) {
                 $this->_dynamicColumns[$value] = [
                     'class' => AdminRawColumn::className(),
@@ -198,7 +197,21 @@ class AdminTable extends Table
                     'currentOrder' => $this->currentOrder
                 ];
             } else {
-                $this->_dynamicColumns[$key] = is_string($value) ? ['class' => $value] : $value;
+                if (is_string($value)) {
+                    $this->_dynamicColumns[$key] = [
+                        'class' => $value,
+                        'name' => $key,
+                        'admin' => $this->admin,
+                        'moduleName' => $this->moduleName,
+                        'currentOrder' => $this->currentOrder
+                    ];
+                } else {
+                    $this->_dynamicColumns[$key] = array_merge($value, [
+                        'admin' => $this->admin,
+                        'moduleName' => $this->moduleName,
+                        'currentOrder' => $this->currentOrder
+                    ]);
+                }
             }
         }
     }
