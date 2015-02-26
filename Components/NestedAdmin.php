@@ -142,7 +142,7 @@ abstract class NestedAdmin extends ModelAdmin
         if (!isset($data['pk'])) {
             throw new Exception("Failed to receive primary key");
         }
-
+//        d($data);
         /** @var \Mindy\Orm\TreeModel $modelClass */
         $modelClass = $this->getModel();
 
@@ -157,15 +157,24 @@ abstract class NestedAdmin extends ModelAdmin
 
             $models = $data['models'];
             $dataPk = [];
+            $descendants = [];
+
             foreach ($models as $position => $pk) {
                 $dataPk[$pk] = $position;
-                $modelClass::objects()->filter(['pk' => $pk])->update(['root' => $position]);
             }
 
             foreach ($roots as $root) {
-                $root->objects()->descendants()->filter([
+                $descendants[$root->pk] = $root->objects()->descendants()->filter([
                     'level__gt' => 1
-                ])->update(['root' => $dataPk[$root->pk]]);
+                ])->valuesList(['pk'], true);
+            }
+
+            foreach ($roots as $root) {
+                $modelClass::objects()->filter(['pk__in' => $descendants[$root->pk]])->update(['root' => $dataPk[$root->pk]]);
+            }
+
+            foreach ($dataPk as $pk => $position) {
+                $modelClass::objects()->filter(['pk' => $pk])->update(['root' => $position]);
             }
         } else {
             $target = null;
