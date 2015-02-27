@@ -153,20 +153,32 @@ abstract class NestedAdmin extends ModelAdmin
         }
 
         if ($model->getIsRoot()) {
-            $roots = $modelClass::objects()->roots()->all();
-
             $models = $data['models'];
+
+            $roots = $modelClass::objects()->roots()->filter(['pk__in' => $models])->all();
+
             $dataPk = [];
+            $newPositions = [];
+            $oldPositions = [];
             $descendants = [];
 
             foreach ($models as $position => $pk) {
-                $dataPk[$pk] = $position;
+                $newPositions[$pk] = $position;
             }
 
             foreach ($roots as $root) {
+                $oldPositions[$root->pk] = $root->root;
                 $descendants[$root->pk] = $root->objects()->descendants()->filter([
                     'level__gt' => 1
                 ])->valuesList(['pk'], true);
+            }
+
+            /**
+             * Pager-independent sorting
+             */
+            asort($oldPositions);
+            foreach ($newPositions as $pk => $position) {
+                $dataPk[$pk] = array_shift($oldPositions);
             }
 
             foreach ($roots as $root) {

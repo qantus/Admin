@@ -542,9 +542,17 @@ abstract class ModelAdmin
         } else {
             throw new Exception("Failed to receive models");
         }
-
-        foreach ($models as $position => $pk) {
-            $modelClass::objects()->filter(['pk' => $pk])->update([$this->sortingColumn => $position]);
+        /**
+         * Pager-independent sorting
+         */
+        $oldPositions = [];
+        foreach ($models as $pk) {
+            $oldPositions[] = $modelClass::objects()->filter(['pk' => $pk])->get()->{$this->sortingColumn};
+        }
+        asort($oldPositions);
+        foreach ($models as $pk) {
+            $newPosition = array_shift($oldPositions);
+            $modelClass::objects()->filter(['pk' => $pk])->update([$this->sortingColumn => $newPosition]);
         }
         if (Mindy::app()->request->getIsAjax()) {
             Mindy::app()->controller->json(['success' => true]);
