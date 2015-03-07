@@ -93,7 +93,7 @@ class AdminController extends BackendController
      */
     protected function getAdminClassName($module, $adminClass)
     {
-        $className = "\\Modules\\" . ucfirst(strtolower($module)) . "\\Admin\\" . $adminClass;
+        $className = "\\Modules\\" . $module . "\\Admin\\" . $adminClass;
         if (class_exists($className)) {
             return $className;
         }
