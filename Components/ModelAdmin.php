@@ -11,7 +11,6 @@ use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
 use Mindy\Orm\Model;
 use Mindy\Orm\QuerySet;
-use Mindy\Pagination\Pagination;
 use Modules\Admin\AdminModule;
 use Modules\Admin\Tables\AdminTable;
 use Modules\Core\CoreModule;
