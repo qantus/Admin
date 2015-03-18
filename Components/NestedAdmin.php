@@ -47,6 +47,9 @@ abstract class NestedAdmin extends ModelAdmin
         if (array_key_exists('id', $this->params) && $this->params['id']) {
             $qs = $modelClass::objects()->filter(['pk' => $this->params['id']]);
             $model = $qs->get();
+            if ($model === null) {
+                $this->error(404);
+            }
             $qs = $model->objects()->children();
         } else {
             $model = new $modelClass();

@@ -9,6 +9,7 @@ use Mindy\Form\ModelForm;
 use Mindy\Helper\Text;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
+use Mindy\Http\Traits\HttpErrors;
 use Mindy\Orm\Model;
 use Mindy\Orm\QuerySet;
 use Modules\Admin\AdminModule;
@@ -18,7 +19,7 @@ use Modules\Meta\Components\MetaTrait;
 
 abstract class ModelAdmin
 {
-    use Accessors, Configurator, MetaTrait, ApplicationList;
+    use Accessors, Configurator, MetaTrait, ApplicationList, HttpErrors;
 
     /**
      * @var string or array
