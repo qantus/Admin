@@ -62,6 +62,10 @@ abstract class ModelAdmin
      */
     public $linkColumn;
     /**
+     * @var bool
+     */
+    public $showPkColumn = true;
+    /**
      * @var string
      */
     protected $moduleName;
@@ -147,9 +151,14 @@ abstract class ModelAdmin
     public function getColumnValue($column, $model)
     {
         list($column, $model) = $this->getChainedModel($column, $model);
+        if ($model === null) {
+            return null;
+        }
+
         if ($column == 'pk') {
             $column = $model->getPkName();
         }
+
         if ($model->hasAttribute($column)) {
             return $model->getAttribute($column);
         } else {
@@ -173,10 +182,15 @@ abstract class ModelAdmin
             $last = count($exploded) - 1;
             $column = null;
             foreach ($exploded as $key => $name) {
-                $value = $model->{$name};
-                $column = $name;
-                if ($key != $last && $value) {
-                    $model = $value;
+                if ($model instanceof Model) {
+                    $value = $model->{$name};
+                    $column = $name;
+                    if ($key != $last && $value) {
+                        $model = $value;
+                    }
+                } else {
+                    $model = null;
+                    break;
                 }
             }
         }
@@ -259,6 +273,7 @@ abstract class ModelAdmin
 
         $table = new AdminTable($qs, [
             'admin' => $this,
+            'showPkColumn' => $this->showPkColumn,
             'sortingColumn' => $this->sortingColumn,
             'moduleName' => $this->moduleName,
             'currentOrder' => $currentOrder,

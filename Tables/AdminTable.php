@@ -30,6 +30,10 @@ class AdminTable extends Table
      */
     public $sortingColumn;
     /**
+     * @var bool
+     */
+    public $showPkColumn = true;
+    /**
      * @var array
      */
     public $html = [
@@ -108,28 +112,30 @@ class AdminTable extends Table
             $columns = $rawColumns;
         }
 
-        $columns = array_merge([
-            'pk' => [
-                'class' => AdminLinkColumn::className(),
-                'name' => $admin->getModel()->getPkName(),
-                'admin' => $admin,
-                'moduleName' => $moduleName,
-                'currentOrder' => $this->currentOrder,
-                'html' => [
-                    'class' => 'td-id',
-                    'align' => 'left'
-                ],
-                'route' => function ($record) use ($moduleName, $adminClass) {
-                    // 'admin:update' moduleName adminClass model.pk
-                    // 'admin:list_nested' moduleName adminClass model.pk
-                    return Mindy::app()->urlManager->reverse('admin:update', [
-                        'moduleName' => $moduleName,
-                        'adminClass' => $adminClass,
-                        'pk' => $record->pk
-                    ]);
-                }
-            ]
-        ], $columns);
+        if ($this->showPkColumn) {
+            $columns = array_merge([
+                'pk' => [
+                    'class' => AdminLinkColumn::className(),
+                    'name' => $admin->getModel()->getPkName(),
+                    'admin' => $admin,
+                    'moduleName' => $moduleName,
+                    'currentOrder' => $this->currentOrder,
+                    'html' => [
+                        'class' => 'td-id',
+                        'align' => 'left'
+                    ],
+                    'route' => function ($record) use ($moduleName, $adminClass) {
+                        // 'admin:update' moduleName adminClass model.pk
+                        // 'admin:list_nested' moduleName adminClass model.pk
+                        return Mindy::app()->urlManager->reverse('admin:update', [
+                            'moduleName' => $moduleName,
+                            'adminClass' => $adminClass,
+                            'pk' => $record->pk
+                        ]);
+                    }
+                ]
+            ], $columns);
+        }
 
         if ($this->sortingColumn) {
             $columns = array_merge([

@@ -81,6 +81,9 @@ class AdminRawColumn extends Column
     {
         $value = $this->admin->getColumnValue($this->name, $record);
         list($column, $model) = $this->admin->getChainedModel($this->name, $record);
+        if ($model === null) {
+            return null;
+        }
         $field = $model->getField($column, false);
         if ($field) {
             if (is_a($field, HasManyField::className()) || is_a($field, ManyToManyField::className())) {
