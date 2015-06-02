@@ -84,6 +84,7 @@ class AdminRawColumn extends Column
         if ($model === null) {
             return null;
         }
+
         $field = $model->getField($column, false);
         if ($field) {
             if (is_a($field, HasManyField::className()) || is_a($field, ManyToManyField::className())) {
