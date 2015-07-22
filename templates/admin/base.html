@@ -11,84 +11,48 @@
         <title>{% if this.title %}{% for title in this.title %}{{ title }}{% if not loop.last %} - {% endif %}{% endfor %}{% else %}{{ title }}{% endif %}</title>
     {%- endif -%}
     <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
-    <script type="text/javascript">
-        CKEDITOR_BASEPATH = '/static_admin/vendor/ckeditor/';
-    </script>
     <script src="/static_admin/dist/js/1.0.0.all.js"></script>
-    <script type="text/javascript">
-        CKEDITOR.config.skin = 'moono-dark,/static_admin/ckeditor/mindy/dist/';
-        CKEDITOR.config.contentsCss = "/static_admin/ckeditor/mindy/dist/content.css";
-    </script>
-    <script type='application/javascript' src='/static_admin/dist/wysiwyg/tiny_mce.js'></script>
+
+    <script src="/static_admin/vendor/ueditor107/dist/ueditor.all.js"></script>
+    <script src="/static_admin/vendor/ueditor107/dist/lang/en/en.js"></script>
 </head>
 <body>
-<section id="wrapper">
-    <section id="base">
-        <section id="base-line">
-            <aside id="sidebar">
-                <header id="header">
-                    <nav class="manage right">
-                        <a href="/" target="_blank" rel="tooltip" title="{{ t('Open site', 'admin') }}">
-                            <i class="icon-link"></i>
-                        </a>
-                        <a href="{% url 'admin:changepassword' user.pk %}" rel="tooltip" title="{{ t('Change password', 'user') }}">
-                            <i class="icon-key"></i>
-                        </a>
-                        <a href="{% url 'core:settings' %}" rel="tooltip" title="{{ t('Settings', 'admin') }}">
-                            <i class="icon-settings"></i>
-                        </a>
-                        <a href="{% url 'admin:logout' %}" rel="tooltip" title="{{ t('Logout', 'user') }}">
-                            <i class="icon-logout"></i>
-                        </a>
-                    </nav>
+{% set cookie = request.cookies.get('sidebar-show') %}
+<table id="wrapper-table">
+    <tbody>
+        <tr>
+            <td id="sidebar-td"{% if cookie and cookie.value == 'true' %}{% else %} class="hide"{% endif %}>
+                <div class="overflow-wrapper">
+                    <div class="perfect-scrollbar">
+                        {% include "admin/_sidebar.html" %}
+                    </div>
+                </div>
+            </td>
+            <td id="content-td">
+                <div class="overflow-wrapper">
+                    <div class="webkit-fix-padding-td">
+                        <section id="content" class="{% block content_class %}{% endblock %}">
+                            <section class="content-wrap">
+                                {% block breadcrumbs %}
+                                    {% include "admin/_breadcrumbs.html" %}
+                                {% endblock %}
 
-                    <h1 id="logo"><a href="{% url 'admin:index' %}"><i class="icon-mindy"></i> {{ get_version }}</a></h1>
-                </header>
+                                <section class="heading">
+                                    {% block heading %}{% endblock %}
+                                </section>
 
-                <nav id="sidebar-menu">
-                    {% include 'admin/menu.html' %}
-                </nav>
-            </aside>
+                                {% block flash %}
+                                    {% include "admin/_flash.html" %}
+                                {% endblock %}
 
-            <section id="main">
-                <a id="hide-sidebar" rel="tooltip" title="{{ t('Hide / show sidebar', 'admin') }}" href="#">{{ t('Hide sidebar', 'admin') }}</a>
-                <section id="content" class="{% block content_class %}{% endblock %}">
-                    {% block breadcrumbs %}
-                        {% include "admin/_breadcrumbs.html" %}
-                    {% endblock %}
-
-                    <section class="heading">
-                        {% block heading %}{% endblock %}
-                    </section>
-
-                    {% block flash %}
-                        {% include "admin/_flash.html" %}
-                    {% endblock %}
-
-                    {% for message in flash %}
-                        <div data-alert class="alert-box">
-                            {{ message }}
-                            <a href="#" class="close">&times;</a>
-                        </div>
-                    {% endfor %}
-
-                    <section class="content-wrap">
-                        {% block content %}{% endblock %}
-                    </section>
-                </section>
-
-                <footer id="footer" class="small-12 columns">
-                    &copy; Studio107
-                </footer>
-            </section>
-
-            <section id="last-column">
-                <section class="last-columns-content">
-                    {% include "admin/_user_actions.html" %}
-                </section>
-            </section>
-        </section>
-    </section>
-</section>
+                                {% block content %}{% endblock %}
+                            </section>
+                        </section>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </tbody>
+</table>
 </body>
 </html>

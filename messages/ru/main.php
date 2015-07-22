@@ -1,6 +1,7 @@
 <?php
 
 return array (
+  'Module' => 'Модуль',
   'Remove' => 'Удалить',
   'Last changes' => 'Последние изменения',
   'Lately, nothing interesting happened.' => 'За последнее время ничего интересного не произошло.',

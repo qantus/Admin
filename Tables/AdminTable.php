@@ -221,4 +221,16 @@ class AdminTable extends Table
             }
         }
     }
+
+    public function render()
+    {
+        return strtr($this->template, [
+            '{html}' => $this->getHtmlAttributes(),
+            '{caption}' => $this->renderCaption(),
+            '{header}' => $this->renderHeader(),
+            '{footer}' => $this->renderFooter(),
+            '{body}' => $this->renderBody(),
+            '{pager}' => $this->getPager()->render('admin/admin/_pager.html')
+        ]);
+    }
 }

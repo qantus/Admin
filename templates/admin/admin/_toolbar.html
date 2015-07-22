@@ -1,33 +1,39 @@
 <div class="toolbar-holder">
     <section class="toolbar sticky">
         {% if searchFields %}
-            <a class="button search" href="#">
-                <i class="icon-search"></i>
-            </a>
+            <div class="left">
+                <a class="button search" href="#">
+                    <i class="icon-search"></i>
+                </a>
 
-            <div class="search-toolbar">
-                <i class="icon-search"></i>
-                <input type="text" name="search" placeholder="{{ t('Search','admin') }}..." value="{{ request.get.get('search') }}"/>
-                <a class="exit-search" href="#"><i class="icon-x"></i></a>
+                <div class="search-toolbar">
+                    <i class="icon-search"></i>
+                    <input type="text" name="search" placeholder="{{ t('Search','admin') }}..." value="{{ request.get.get('search') }}"/>
+                    <a class="exit-search" href="#"><i class="icon-x"></i></a>
+                </div>
             </div>
         {% endif %}
 
-        {% if admin.canCreate %}
-            <a href="{% url 'admin:create' moduleName adminClass %}" class="create button sub-button-left custom-button">
-                <span class="sub-button">
-                    <i class="icon-plus"></i>
-                </span>
-                {{ t('Create', 'admin') }}
-            </a>
-        {% endif %}
+        <div class="left">
+            {% if admin.canCreate %}
+                <a href="{% url 'admin:create' moduleName adminClass %}" class="create button sub-button-left custom-button">
+                    <span class="sub-button">
+                        <i class="icon-plus"></i>
+                    </span>
+                    {{ t('Create', 'admin') }}
+                </a>
+            {% endif %}
+        </div>
 
-        <select name="action" id="actions" class="actions">
-            <option value="" disabled="disabled" selected="selected">{{ t('Choose action', 'admin') }}</option>
-            {% for key, value in actions %}
-                <option value="{{ key }}">{{ value }}</option>
-            {% endfor %}
-        </select>
+        <div class="left">
+            <select name="action" id="actions" class="actions">
+                <option value="" disabled="disabled" selected="selected">{{ t('Choose action', 'admin') }}</option>
+                {% for key, value in actions %}
+                    <option value="{{ key }}">{{ value }}</option>
+                {% endfor %}
+            </select>
 
-        <button type="submit" class="submit-actions button custom-button">{{ t('Submit', 'admin') }}</button>
+            <button type="submit" class="submit-actions button custom-button">{{ t('Submit', 'admin') }}</button>
+        </div>
     </section>
 </div>

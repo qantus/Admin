@@ -1,28 +1,42 @@
-<nav id="breadcrumbs">
-    {% for bc in this.breadcrumbs %}
-        {% if not loop.first %}
-            <li>/</li>
-        {% endif %}
-        <li>
-            {% if loop.last %}
-                {{ bc.name|trim }}
+<div class="breadcrumb-container">
+    <div class="ui tiny breadcrumb">
+        <div class="section">
+            <a data-content="{{ t('Show / hide sidebar', 'admin') }}"
+               data-variation="tiny inverted" class="ui show-hide-sidebar mini circular button icon" id="hide-sidebar" href="#">
+                <i class="icon sidebar"></i>
+            </a>
+        </div>
+        {% for bc in this.breadcrumbs %}
+            {% if loop.first %}
+                <div class="section">{{ t('Module', 'admin') }}: {{ bc.name|trim }}</div>
+                {% if not loop.last %}
+                    <i class="right chevron icon divider"></i>
+                {% endif %}
+            {% elif loop.last %}
+                <div class="active section">{{ bc.name|trim }}</div>
             {% else %}
                 {% if bc.url %}
-                    <a href="{{ bc.url }}">{{ bc.name|trim }}</a>
+                    <a class="section breadcrumb-nested" href="{{ bc.url }}">{{ bc.name|trim }}</a>
                 {% else %}
-                    {{ bc.name|trim }}
+                    <div class="section breadcrumb-nested">{{ bc.name|trim }}</div>
                 {% endif %}
-            {% endif %}
 
-            {% if bc.items|length > 1 %}
-                <nav class="children">
-                {% for item in bc.items %}
-                    <li>
-                        <a href="{{ item.url }}">{{ item.name|trim }}</a>
-                    </li>
-                {% endfor %}
-                </nav>
+                {% if bc.items|length > 1 %}
+                    <div class="ui popup">
+                        {% if bc.items|length > 1 %}
+                            <ul class="breadcrumb-nested-list">
+                                {% for item in bc.items %}
+                                    <li>
+                                        <a href="{{ item.url }}">{{ item.name|trim }}</a>
+                                    </li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    </div>
+                {% endif %}
+
+                <i class="right chevron icon divider"></i>
             {% endif %}
-        </li>
-    {% endfor %}
-</nav>
+        {% endfor %}
+    </div>
+</div>

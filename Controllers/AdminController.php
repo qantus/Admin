@@ -12,11 +12,6 @@ use Modules\Core\Tables\UserLogTable;
 
 class AdminController extends BackendController
 {
-    public function actionEditor()
-    {
-        echo $this->render("admin/editor.html");
-    }
-
     /**
      * @return string
      */
