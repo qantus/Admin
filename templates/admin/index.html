@@ -1,9 +1,11 @@
 {% extends "admin/base.html" %}
 
 {% block heading %}
-    <h1>{{ t('User actions', 'admin') }}</h1>
+    <h1>{{ t('Dashboard', 'admin') }}</h1>
 {% endblock %}
 
 {% block content %}
-    {{ table.render()|safe }}
+    {% for dashboard in dashboards %}
+        {{ dashboard.render()|safe }}
+    {% endfor %}
 {% endblock %}

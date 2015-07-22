@@ -18,13 +18,17 @@ class AdminController extends BackendController
     public function actionIndex()
     {
         $module = $this->getModule();
-        $this->addBreadcrumb($module->t('User actions'));
-        $this->addTitle($module->t('User actions'));
+        $this->addBreadcrumb($module->t('Dashboard'));
+        $this->addTitle($module->t('Dashboard'));
 
-        $qs = UserLog::objects()->order(['-created_at']);
-        $table = new UserLogTable($qs);
+        $dashboards = [];
+        $dashboardClasses = $this->getModule()->getDashboardClasses();
+        foreach ($dashboardClasses as $cls) {
+            $dashboards[] = new $cls;
+        }
+
         echo $this->render('admin/index.html', [
-            'table' => $table,
+            'dashboards' => $dashboards
         ]);
     }
 
