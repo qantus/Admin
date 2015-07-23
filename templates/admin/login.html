@@ -8,12 +8,12 @@
 {% block content %}
     <section class="row">
         <section class="columns large-12">
-            <h1>{{ t('Login', 'user') }}</h1>
+            <h3 class="text-center" id="logo">{{ t('Login', 'user') }}</h3>
 
             <form action="" method="post">
                 {% csrf_token %}
                 {{ form.asBlock()|raw }}
-                <button type="submit" class="button">{{ t('Login', 'user') }}</button>
+                <button type="submit" class="ui button fluid tiny primary">{{ t('Login', 'user') }}</button>
             </form>
         </section>
     </section>
