@@ -11,10 +11,10 @@
         <title>{% if this.title %}{% for title in this.title %}{{ title }}{% if not loop.last %} - {% endif %}{% endfor %}{% else %}{{ title }}{% endif %}</title>
     {%- endif -%}
     <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
-    <script src="/static_admin/dist/js/1.0.0.all.js"></script>
-
-    <script src="/static_admin/vendor/ueditor107/dist/ueditor.all.js"></script>
-    <script src="/static_admin/vendor/ueditor107/dist/lang/en/en.js"></script>
+    <script type='text/javascript' src="/static_admin/dist/js/1.0.0.all.js"></script>
+    <script type='text/javascript' src="/static_admin/vendor/ueditor107/dist/ueditor.all.js"></script>
+    <script type='text/javascript' src="/static_admin/vendor/ueditor107/dist/lang/en/en.js"></script>
+    <script type='text/javascript' src='/static_admin/dist/wysiwyg/tiny_mce.js'></script>
 </head>
 <body>
 {% set cookie = request.cookies.get('sidebar-show') %}

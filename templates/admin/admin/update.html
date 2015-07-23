@@ -13,19 +13,19 @@
         {{ form.asUl()|raw }}
 
         <div class="buttons-block">
-            <input type="submit" class="button" name="save" value="{{ t('Save', 'admin') }}"/>
-            <input type="submit" class="button transparent" name="save_continue"
+            <input type="submit" class="ui button tiny primary" name="save" value="{{ t('Save', 'admin') }}"/>
+            <input type="submit" class="ui button tiny basic" name="save_continue"
                    value="{{ t('Save and continue', 'admin') }}"/>
-            <input type="submit" class="button transparent" name="save_create"
+            <input type="submit" class="ui button tiny basic" name="save_create"
                    value="{{ t('Save and create', 'admin') }}"/>
 
             {% if model %}
                 <div class="right">
                     {% if method_exists(model, "getAbsoluteUrl") %}
-                        <a class="button transparent" href="{{ form.getInstance().getAbsoluteUrl() }}"
+                        <a class="ui button tiny basic" href="{{ form.getInstance().getAbsoluteUrl() }}"
                            target="_blank">{{ t('View at site', 'admin') }}</a>
                     {% endif %}
-                    <a class="button transparent"
+                    <a class="ui button tiny basic"
                        data-confirm="{{ t('Do you really want to delete this item?', 'admin') }}"
                        href="{% url 'admin:delete' module adminClass form.getInstance().pk %}">
                         {{ t('Delete', 'admin') }}

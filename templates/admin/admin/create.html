@@ -11,9 +11,9 @@
         {% csrf_token %}
         {{ form.asUl()|raw }}
         <div class="buttons-block">
-            <input type="submit" class="button" name="save" value="{{ t('Save', 'admin') }}"/>
-            <input type="submit" class="button transparent" name="save_continue" value="{{ t('Save and continue', 'admin') }}"/>
-            <input type="submit" class="button transparent" name="save_create" value="{{ t('Save and create', 'admin') }}"/>
+            <input type="submit" class="ui button tiny primary" name="save" value="{{ t('Save', 'admin') }}"/>
+            <input type="submit" class="ui button tiny basic" name="save_continue" value="{{ t('Save and continue', 'admin') }}"/>
+            <input type="submit" class="ui button tiny basic" name="save_create" value="{{ t('Save and create', 'admin') }}"/>
         </div>
     </form>
 {% endblock %}

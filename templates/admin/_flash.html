@@ -2,7 +2,7 @@
     <ul class="flash-list">
         {% for key, value in request.flash.all() %}
             <li class="{{ key }}">
-                <span class="close right" rel="tooltip" title="Закрыть">&times;</span>
+                <span class="icon remove right">&times;</span>
                 {{ value }}
             </li>
         {% endfor %}

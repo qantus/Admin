@@ -27,6 +27,6 @@ class SortingColumn extends Column
 
     public function getValue($record)
     {
-        return '<i class="icon-menu"></i>';
+        return '<i class="icon sort"></i>';
     }
 }

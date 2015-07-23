@@ -6,8 +6,8 @@
     <h1>
         {{ admin.getVerboseNameList() }}
         {% if id %}
-        <a class="admin-header-link" href="{% url 'admin:update' moduleName adminClass id %}">
-            <i class="icon-edit"></i>
+        <a class="tiny ui button basic icon" href="{% url 'admin:update' moduleName adminClass id %}">
+            <i class="icon write"></i>
             {{ t('Update', 'admin') }}
         </a>
         {% endif %}
