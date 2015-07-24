@@ -18,41 +18,37 @@
 </head>
 <body>
 {% set cookie = request.cookies.get('sidebar-show') %}
-<table id="wrapper-table">
-    <tbody>
-        <tr>
-            <td id="sidebar-td"{% if cookie and cookie.value == 'true' %}{% else %} class="hide"{% endif %}>
-                <div class="overflow-wrapper">
-                    <div class="perfect-scrollbar">
-                        {% include "admin/_sidebar.html" %}
-                    </div>
-                </div>
-            </td>
-            <td id="content-td">
-                <div class="overflow-wrapper">
-                    <div class="webkit-fix-padding-td">
-                        <section id="content" class="{% block content_class %}{% endblock %}">
-                            <section class="content-wrap">
-                                {% block breadcrumbs %}
-                                    {% include "admin/_breadcrumbs.html" %}
-                                {% endblock %}
+<div id="wrapper-table">
+    <div id="sidebar-td"{% if cookie and cookie.value == 'true' %}{% else %} class="hide"{% endif %}>
+        <div class="overflow-wrapper">
+            <div class="perfect-scrollbar">
+                {% include "admin/_sidebar.html" %}
+            </div>
+        </div>
+    </div>
+    <div id="content-td">
+        <div class="overflow-wrapper">
+            <div class="webkit-fix-padding-td">
+                <section id="content" class="{% block content_class %}{% endblock %}">
+                    <section class="content-wrap">
+                        {% block breadcrumbs %}
+                            {% include "admin/_breadcrumbs.html" %}
+                        {% endblock %}
 
-                                <section class="heading">
-                                    {% block heading %}{% endblock %}
-                                </section>
-
-                                {% block flash %}
-                                    {% include "admin/_flash.html" %}
-                                {% endblock %}
-
-                                {% block content %}{% endblock %}
-                            </section>
+                        <section class="heading">
+                            {% block heading %}{% endblock %}
                         </section>
-                    </div>
-                </div>
-            </td>
-        </tr>
-    </tbody>
-</table>
+
+                        {% block flash %}
+                            {% include "admin/_flash.html" %}
+                        {% endblock %}
+
+                        {% block content %}{% endblock %}
+                    </section>
+                </section>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
