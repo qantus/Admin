@@ -16,9 +16,9 @@
                 <div class="active section">{{ bc.name|trim }}</div>
             {% else %}
                 {% if bc.url %}
-                    <a class="section breadcrumb-nested" href="{{ bc.url }}">{{ bc.name|trim }}</a>
+                    <a class="section{% if bc.items|length > 1 %} breadcrumb-nested{% endif %}" href="{{ bc.url }}">{{ bc.name|trim }}</a>
                 {% else %}
-                    <div class="section breadcrumb-nested">{{ bc.name|trim }}</div>
+                    <div class="section{% if bc.items|length > 1 %} breadcrumb-nested{% endif %}">{{ bc.name|trim }}</div>
                 {% endif %}
 
                 {% if bc.items|length > 1 %}
