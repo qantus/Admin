@@ -90,7 +90,7 @@ class AdminRawColumn extends Column
             if (is_a($field, HasManyField::className()) || is_a($field, ManyToManyField::className())) {
                 return null;
             } else if (is_a($field, BooleanField::className())) {
-                return '<i class="icon-' . ($value ? 'ok' : 'cancel') . '"></i>';
+                return $value ? '<i class="icon checkmark"></i>' : '';
             } else if (!empty($field->choices) && array_key_exists($value, $field->choices)) {
                 return $field->choices[$value];
             } else {
