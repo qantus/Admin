@@ -377,6 +377,10 @@ abstract class ModelAdmin
         $modelClass = $this->getModel();
         $model = $modelClass::objects()->filter(['pk' => $pk])->get();
 
+        if ($model === null) {
+            $this->error(404);
+        }
+
         if (!is_string($modelClass)) {
             $modelClass = get_class($model);
         }
