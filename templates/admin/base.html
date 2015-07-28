@@ -19,14 +19,14 @@
 <body>
 {% set cookie = request.cookies.get('sidebar-show') %}
 <div id="wrapper-table">
-    <div id="sidebar-td"{% if cookie and cookie.value == 'true' %}{% else %} class="hide"{% endif %}>
+    <div id="sidebar-td"{% if cookie and cookie.value != 'true' %} class="hide"{% else %}{% endif %}>
         <div class="overflow-wrapper">
             <div class="perfect-scrollbar">
                 {% include "admin/_sidebar.html" %}
             </div>
         </div>
     </div>
-    <div id="content-td">
+    <div id="content-td"{% if cookie and cookie.value != 'true' %} style="margin-left: 0;"{% endif %}>
         <div class="overflow-wrapper">
             <div class="webkit-fix-padding-td">
                 <section id="content" class="{% block content_class %}{% endblock %}">
