@@ -21,14 +21,12 @@
         </td>
         {% if searchFields %}
             <td class="toolbar-search-td">
-                <form action="" method="get">
-                    <div class="ui icon action input fluid">
-                        <input type="text" name="search" placeholder="{{ t('Search','admin') }}..." value="{{ request.get.get('search') }}"/>
-                        <button class="ui button tiny primary icon">
-                            <i class="search icon"></i>
-                        </button>
-                    </div>
-                </form>
+                <div class="ui icon action input fluid">
+                    <input type="text" name="search" placeholder="{{ t('Search','admin') }}..." value="{{ request.post.get('search') }}"/>
+                    <button type="submit" class="ui button tiny primary icon">
+                        <i class="search icon"></i>
+                    </button>
+                </div>
             </td>
         {% endif %}
     </tr>

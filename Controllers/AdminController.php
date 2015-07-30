@@ -43,6 +43,7 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
+        /** @var \Modules\Admin\Components\ModelAdmin $admin */
         $admin = new $className(['moduleName' => $module]);
         if (is_string($admin->getModel()) && class_exists($admin->getModel()) === false) {
             $this->error(404);
@@ -54,7 +55,11 @@ class AdminController extends BackendController
             $admin->$action($_POST);
         }
 
-        $admin->setParams($_GET);
+        $params = isset($_POST['search']) ? array_merge([
+            'search' => $_POST['search']
+        ], $_GET) : $_GET;
+        $admin->setParams($params);
+
         $moduleName = $admin->getModule()->getId();
 
         $context = $admin->index();
