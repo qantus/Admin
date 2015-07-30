@@ -11,6 +11,7 @@ use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
 use Mindy\Http\Traits\HttpErrors;
 use Mindy\Orm\Model;
+use Mindy\Orm\Q\OrQ;
 use Mindy\Orm\QuerySet;
 use Modules\Admin\AdminModule;
 use Modules\Admin\Tables\AdminTable;
@@ -598,9 +599,13 @@ abstract class ModelAdmin
                     $lookup = 'exact';
                 }
 
-                $filters[implode('__', [$field_name, $lookup])] = $this->params['search'];
+                $filters[] = [
+                    implode('__', [$field_name, $lookup]) => $this->params['search']
+                ];
             }
-            $qs->filter($filters);
+            $qs->filter([
+                new OrQ($filters)
+            ]);
         }
         return $qs;
     }
