@@ -57,6 +57,10 @@ class AdminTable extends Table
      * @var array
      */
     private $_dynamicColumns = [];
+    /**
+     * @var string
+     */
+    public $actionsTemplate = 'admin/admin/_actions.html';
 
     public function init()
     {
@@ -159,7 +163,7 @@ class AdminTable extends Table
         $columns = array_merge($columns, [
             'actions' => [
                 'class' => TemplateColumn::className(),
-                'template' => "admin/admin/_actions.html",
+                'template' => $this->actionsTemplate,
                 'title' => '',
                 'html' => [
                     'class' => 'actions'

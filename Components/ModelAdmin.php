@@ -281,6 +281,7 @@ abstract class ModelAdmin
             'currentOrder' => $currentOrder,
             'columns' => $this->getColumns(),
             'linkColumn' => $this->linkColumn,
+            'actionsTemplate' => $this->actionsTemplate,
             'paginationConfig' => [
                 'pageSize' => $this->pageSize
             ]
