@@ -48,7 +48,9 @@
                         </tr>
                         <tr>
                             <td class="nested" colspan="2">
-                                {{ value|safe }}
+                                <div class="nested-container">
+                                    {{ value|safe }}
+                                </div>
                     {% else %}
                         {% if field.className == 'Mindy\\Orm\\Fields\\FileField' %}
                             <a href="{{ value }}">{{ value }}</a>
