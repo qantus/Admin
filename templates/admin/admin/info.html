@@ -1,59 +1,64 @@
 {% extends request.isAjax ? "ajax.html" : 'admin/base.html' %}
 
 {% block heading %}
-    <h1>{{ t('Information about', 'admin') }} {{ admin.getVerboseName()|ucfirst }}</h1>
+    <h1>
+        {{ t('Information about', 'admin') }} {{ admin.getVerboseName()|ucfirst }}
+        <a href="{% url 'admin:info_print' moduleName adminClass model.pk %}" target="_blank"
+           class="window-open ui button tiny basic print-button">{{ t('Print', 'admin') }}</a>
+    </h1>
 {% endblock %}
 
 {% block content_class %}info{% endblock %}
 
 {% block content %}
-    <div class="row">
-        <div class="large-12">
-            <a href="{% url 'admin:info_print' moduleName adminClass model.pk %}" target="_blank" class="window-open button print-button">{{ t('Print', 'admin') }}</a>
-        </div>
-    </div>
-    <section class="model-info">
+    <table class="model-info">
+        <tbody>
         {% for name, field in fields %}
-            <section class="row">
-                <section class="field">
-                    <section class="column large-3 field-label">
-                        {% if field.verboseName  %}
-                            {{ field.verboseName }}
+            <tr>
+                <td class="first">
+                    {% if field.verboseName %}
+                        {{ field.verboseName }}
+                    {% else %}
+                        {% if name == 'id' %}
+                            {{ t('Number / identifier', 'admin') }}
                         {% else %}
-                            {% if name == 'id' %}
-                                {{ t('Number / identifier', 'admin') }}
-                            {% else %}
-                                {{ name|capitalize }}
-                            {% endif %}
+                            {{ name|capitalize }}
                         {% endif %}
-                    </section>
-                    <section class="column large-9 field-value">
-                        {# @TODO: Fix me please #}
-                        {% set value = model.getField(name).getValue() %}
-                        {% if field.choices %}
-                            {{ field.choices[value] }}
-                        {% elseif field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
-                            {% if value %}{{ t('Yes', 'admin') }}{% else %}{{ t('No', 'admin') }}{% endif %}
-                        {% elseif field.className == 'Mindy\\Orm\\Fields\\DateTimeField' or field.className == 'Mindy\\Orm\\Fields\\DateField' %}
-                            {{ value|humanizeDateTime }}
-                        {% elseif field.className == 'Mindy\\Orm\\Fields\\ForeignField' and method_exists(model[name], 'getAbsoluteUrl') %}
-                            <a href="{{ model[name].getAbsoluteUrl() }}" target="_blank">
-                                {{ model[name] }}
-                            </a>
-                        {% elseif field.className == 'Mindy\\Orm\\Fields\\TreeForeignField' and method_exists(model[name], 'getAbsoluteUrl') %}
-                            <a href="{{ model[name].getAbsoluteUrl() }}" target="_blank">
-                                {{ model[name] }}
-                            </a>
+                    {% endif %}
+                </td>
+                <td>
+                    {# @TODO: Fix me please #}
+                    {% set value = model.getField(name).getValue() %}
+                    {% if field.choices %}
+                        {{ field.choices[value] }}
+                    {% elseif field.className == 'Mindy\\Orm\\Fields\\BooleanField' %}
+                        {% if value %}{{ t('Yes', 'admin') }}{% else %}{{ t('No', 'admin') }}{% endif %}
+                    {% elseif field.className == 'Mindy\\Orm\\Fields\\DateTimeField' or field.className == 'Mindy\\Orm\\Fields\\DateField' %}
+                        {{ value|humanizeDateTime }}
+                    {% elseif field.className == 'Mindy\\Orm\\Fields\\ForeignField' and method_exists(model[name], 'getAbsoluteUrl') %}
+                        <a href="{{ model[name].getAbsoluteUrl() }}" target="_blank">
+                            {{ model[name] }}
+                        </a>
+                    {% elseif field.className == 'Mindy\\Orm\\Fields\\TreeForeignField' and method_exists(model[name], 'getAbsoluteUrl') %}
+                        <a href="{{ model[name].getAbsoluteUrl() }}" target="_blank">
+                            {{ model[name] }}
+                        </a>
+                    {% elseif field.className == 'Mindy\\Orm\\Fields\\TextField' %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td class="nested" colspan="2">
+                                {{ value|safe }}
+                    {% else %}
+                        {% if field.className == 'Mindy\\Orm\\Fields\\FileField' %}
+                            <a href="{{ value }}">{{ value }}</a>
                         {% else %}
-                            {% if field.className == 'Mindy\\Orm\\Fields\\FileField' %}
-                                <a href="{{ value }}">{{ value }}</a>
-                            {% else %}
-                                {{ value }}
-                            {% endif %}
+                            {{ value }}
                         {% endif %}
-                    </section>
-                </section>
-            </section>
+                    {% endif %}
+                </td>
+            </tr>
         {% endfor %}
-    </section>
+        </tbody>
+    </table>
 {% endblock %}
