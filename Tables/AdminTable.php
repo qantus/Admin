@@ -192,6 +192,11 @@ class AdminTable extends Table
         ];
     }
 
+    public function getColumn($key)
+    {
+        return isset($this->_dynamicColumns[$key]) ? $this->_dynamicColumns[$key] : null;
+    }
+
     /**
      * @param array $columns
      */

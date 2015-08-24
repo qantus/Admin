@@ -6,6 +6,7 @@ use Exception;
 use Mindy\Base\ApplicationList;
 use Mindy\Base\Mindy;
 use Mindy\Form\ModelForm;
+use Mindy\Helper\Creator;
 use Mindy\Helper\Text;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
@@ -22,6 +23,7 @@ abstract class ModelAdmin
 {
     use Accessors, Configurator, MetaTrait, ApplicationList, HttpErrors;
 
+    public $adminTableClassName = '\Modules\Admin\Tables\AdminTable';
     /**
      * @var string or array
      */
@@ -273,7 +275,7 @@ abstract class ModelAdmin
             $qs = $this->search($qs);
         }
 
-        $table = new AdminTable($qs, [
+        $table = Creator::createObject($this->adminTableClassName, $qs, [
             'admin' => $this,
             'showPkColumn' => $this->showPkColumn,
             'sortingColumn' => $this->sortingColumn,
