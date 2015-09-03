@@ -97,7 +97,8 @@ abstract class ModelAdmin
     {
         return [
             'remove' => AdminModule::t('Remove'),
-            'exportCsv' => AdminModule::t('Export to csv file')
+            // Uncomment if you need export data to csv
+            // 'exportCsv' => AdminModule::t('Export to csv file')
         ];
     }
 
