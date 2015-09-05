@@ -7,10 +7,15 @@ use Mindy\Base\ApplicationList;
 use Mindy\Base\Mindy;
 use Mindy\Form\ModelForm;
 use Mindy\Helper\Creator;
+use Mindy\Helper\Csv;
 use Mindy\Helper\Text;
 use Mindy\Helper\Traits\Accessors;
 use Mindy\Helper\Traits\Configurator;
 use Mindy\Http\Traits\HttpErrors;
+use Mindy\Orm\Fields\ForeignField;
+use Mindy\Orm\Fields\HasManyField;
+use Mindy\Orm\Fields\ManyToManyField;
+use Mindy\Orm\Fields\OneToOneField;
 use Mindy\Orm\Model;
 use Mindy\Orm\Q\OrQ;
 use Mindy\Orm\QuerySet;
@@ -91,7 +96,9 @@ abstract class ModelAdmin
     public function getActions()
     {
         return [
-            'remove' => AdminModule::t('Remove')
+            'remove' => AdminModule::t('Remove'),
+            // Uncomment if you need export data to csv
+            // 'exportCsv' => AdminModule::t('Export to csv file')
         ];
     }
 
@@ -555,6 +562,59 @@ abstract class ModelAdmin
         }
 
         $this->redirect('admin:list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
+    }
+
+
+    public function exportCsv(array $data = [])
+    {
+        $qs = $this->getQuerySet($this->getModel());
+        if (isset($data['models'])) {
+            $qs->filter(['pk__in' => $data['models']]);
+        }
+        $exportData = [];
+        $header = [];
+
+        $modelsIterator = $qs->batch(100);
+        $noExportFieldsClassName = [
+            ForeignField::className(),
+            HasManyField::className(),
+            ManyToManyField::className(),
+            OneToOneField::className()
+        ];
+        foreach ($modelsIterator as $models) {
+            foreach ($models as $model) {
+                $fields = $model->getFieldsInit();
+                $line = [];
+                foreach ($fields as $attribute => $field) {
+
+                    if (in_array($field->className(), $noExportFieldsClassName)){
+                        continue;
+                    }
+
+                    $verboseName = $field->getVerboseName($model);
+                    if (!array_key_exists($verboseName, $header)) {
+                        $header[$verboseName] = $verboseName;
+                    }
+                    $line[] = $model->{$attribute};
+                }
+                $exportData[] = $line;
+            }
+        }
+        $this->forceCsv($header, $exportData);
+    }
+
+    protected function forceCsv($header, $data)
+    {
+        $helper = new Csv();
+        if (method_exists($helper, 'createCsv')) {
+            $content = $helper->createCsv($header, $data);
+            Mindy::app()->request->http->sendFile($this->getExportCsvFileName(), $content);
+        }
+    }
+
+    public function getExportCsvFileName()
+    {
+        return date('Y.m.d H:i:s') . '.csv';
     }
 
     public function sorting(array $data = [])
