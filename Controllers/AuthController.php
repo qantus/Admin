@@ -17,14 +17,14 @@ namespace Modules\Admin\Controllers;
 use Mindy\Base\ApplicationList;
 use Mindy\Base\Mindy;
 use Mindy\Helper\Text;
-use Modules\Core\Controllers\CoreController;
+use Modules\Core\Controllers\FrontendController;
 use Modules\User\Admin\UserAdmin;
 use Modules\User\Forms\ChangePasswordForm;
 use Modules\User\Forms\LoginForm;
 use Modules\User\Models\User;
 use Modules\User\UserModule;
 
-class AuthController extends CoreController
+class AuthController extends FrontendController
 {
     use ApplicationList;
 
@@ -50,15 +50,16 @@ class AuthController extends CoreController
 
     public function actionLogin()
     {
+        $r = $this->getRequest();
         $form = new LoginForm();
-        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->login()) {
-            if ($this->r->isAjax) {
-                echo $this->json(array(
+        if ($r->getIsPost() && $form->populate($_POST)->isValid() && $form->login()) {
+            if ($r->getIsAjax()) {
+                echo $this->json([
                     'status' => 'success',
                     'title' => UserModule::t('You have successfully logged in to the site')
-                ));
+                ]);
             } else {
-                $this->r->redirect('admin:index');
+                $r->redirect('admin:index');
             }
         }
 
@@ -66,7 +67,7 @@ class AuthController extends CoreController
             'form' => $form
         ];
 
-        if ($this->r->isAjax) {
+        if ($r->getIsAjax()) {
             echo $this->json([
                 'content' => $this->render('admin/_login.html', $data)
             ]);
@@ -82,18 +83,18 @@ class AuthController extends CoreController
     {
         $auth = Mindy::app()->auth;
         if ($auth->isGuest) {
-            $this->r->redirect(Mindy::app()->homeUrl);
+            $this->getRequest()->redirect(Mindy::app()->homeUrl);
         }
 
         $auth->logout();
-        $this->r->redirect('admin:login');
+        $this->getRequest()->redirect('admin:login');
     }
 
     public function actionChangepassword($id)
     {
         $auth = Mindy::app()->auth;
         if ($auth->isGuest) {
-            $this->r->redirect(Mindy::app()->homeUrl);
+            $this->getRequest()->redirect(Mindy::app()->homeUrl);
         }
 
         $model = User::objects()->filter(['pk' => $id])->get();
@@ -114,9 +115,10 @@ class AuthController extends CoreController
         $this->addBreadcrumb(UserModule::t('Change password'));
 
         $form = new ChangePasswordForm(['model' => $model]);
-        if ($this->r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
-            $this->r->flash->success(UserModule::t('Password changed'));
-            $this->r->http->refresh();
+        $r = $this->getRequest();
+        if ($r->isPost && $form->populate($_POST)->isValid() && $form->save()) {
+            $r->flash->success(UserModule::t('Password changed'));
+            $r->http->refresh();
         }
 
         echo $this->render('admin/changepassword.html', [

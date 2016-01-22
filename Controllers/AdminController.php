@@ -49,7 +49,7 @@ class AdminController extends BackendController
             $this->error(404);
         }
 
-        if ($this->r->http->isPostRequest && isset($_POST['action'])) {
+        if ($this->getRequest()->getIsPost() && isset($_POST['action'])) {
             $action = $_POST['action'];
             unset($_POST['action']);
             $admin->$action($_POST);
@@ -76,7 +76,7 @@ class AdminController extends BackendController
         $this->setBreadcrumbs($breadcrumbs);
         $this->convertBreadcrumbsToTitle($context['breadcrumbs']);
 
-        if ($this->r->isAjax) {
+        if ($this->getRequest()->isAjax) {
             echo $out;
         } else {
             echo $this->render('admin/admin/list.html', array_merge(['adminClass' => $adminClass], [
