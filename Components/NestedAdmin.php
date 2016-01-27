@@ -105,7 +105,8 @@ abstract class NestedAdmin extends ModelAdmin
             'breadcrumbs' => array_merge($this->getBreadcrumbs(), $this->getParentBreadcrumbs($model)),
             'sortingColumn' => $this->sortingColumn,
             'currentOrder' => $currentOrder,
-            'searchFields' => $this->getSearchFields()
+            'searchFields' => $this->getSearchFields(),
+            'filterForm' => $filterForm
         ];
     }
 

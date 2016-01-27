@@ -307,7 +307,9 @@ abstract class ModelAdmin
     }
 
     /**
-     * @return string|null
+     * Class name of filter form
+     * Must be a instance of \Modules\Admin\Components\Filter
+     * @return string
      */
     public function getFilterForm()
     {
