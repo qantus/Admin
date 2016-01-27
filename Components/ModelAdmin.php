@@ -333,6 +333,22 @@ abstract class ModelAdmin
     }
 
     /**
+     * @return array
+     */
+    public function getCreateFormParams()
+    {
+        return [];
+    }
+
+    /**
+     * @return array
+     */
+    public function getUpdateFormParams()
+    {
+        return $this->getCreateFormParams();
+    }
+
+    /**
      * @return \Mindy\Orm\Model
      */
     abstract public function getModel();
@@ -401,10 +417,10 @@ abstract class ModelAdmin
 
         $formClass = $this->getUpdateForm();
         /* @var $form \Mindy\Form\ModelForm */
-        $form = new $formClass([
+        $form = new $formClass(array_merge($this->getUpdateFormParams(), [
             'model' => $model,
             'instance' => $model
-        ]);
+        ]));
 
         if (!empty($data) && $form->populate($data, $files)->isValid() && $form->save()) {
             Mindy::app()->request->flash->success(CoreModule::t('Changes saved'));
@@ -493,10 +509,10 @@ abstract class ModelAdmin
         $formClass = $this->getCreateForm();
 
         /* @var $form \Mindy\Form\ModelForm */
-        $form = new $formClass([
+        $form = new $formClass(array_merge($this->getCreateFormParams(),[
             'model' => $model,
             'instance' => $model,
-        ]);
+        ]));
 
         if (!empty($data) && $form->populate($data, $files)->isValid() && $form->save()) {
             Mindy::app()->request->flash->success(CoreModule::t('Changes saved'));
