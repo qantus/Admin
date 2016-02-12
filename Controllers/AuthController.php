@@ -53,27 +53,12 @@ class AuthController extends FrontendController
         $r = $this->getRequest();
         $form = new LoginForm();
         if ($r->getIsPost() && $form->populate($_POST)->isValid() && $form->login()) {
-            if ($r->getIsAjax()) {
-                echo $this->json([
-                    'status' => 'success',
-                    'title' => UserModule::t('You have successfully logged in to the site')
-                ]);
-            } else {
-                $r->redirect('admin:index');
-            }
+            $r->redirect('admin:index');
         }
 
-        $data = [
+        echo $this->render('admin/login.html', [
             'form' => $form
-        ];
-
-        if ($r->getIsAjax()) {
-            echo $this->json([
-                'content' => $this->render('admin/_login.html', $data)
-            ]);
-        } else {
-            echo $this->render('admin/login.html', $data);
-        }
+        ]);
     }
 
     /**

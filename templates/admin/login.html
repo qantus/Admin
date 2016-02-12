@@ -12,7 +12,7 @@
 
             <form action="" method="post">
                 {% csrf_token %}
-                {{ form.asBlock()|raw }}
+                {{ form|safe }}
                 <button type="submit" class="ui button fluid tiny primary">{{ t('Login', 'user') }}</button>
             </form>
         </section>
