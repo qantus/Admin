@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'Settings center' => 'Центр настроек',
     'Remove' => 'Удалить',
     'Show / hide sidebar' => 'Скрыть / показать боковую панель',
     'Module' => 'Модуль',
