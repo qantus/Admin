@@ -5,9 +5,9 @@ return [
         'name' => 'index',
         'callback' => '\Modules\Admin\Controllers\AdminController:index'
     ],
-    '/editor' => [
-        'name' => 'editor',
-        'callback' => '\Modules\Admin\Controllers\AdminController:editor'
+    '/settings' => [
+        'name' => 'settings',
+        'callback' => '\Modules\Admin\Controllers\SettingsController:index'
     ],
     '/auth/login' => [
         'name' => 'login',
@@ -21,7 +21,7 @@ return [
         'name' => 'recover',
         'callback' => '\Modules\Admin\Controllers\AuthController:recover'
     ],
-    '/list/{module:\w+}/{adminClass:\w+}' => [
+    '/list/{module:\w+}/{adminClass:\w+}/{params:\.+}?' => [
         'name' => 'list',
         'callback' => '\Modules\Admin\Controllers\AdminController:list'
     ],

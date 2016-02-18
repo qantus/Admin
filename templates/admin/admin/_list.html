@@ -21,7 +21,7 @@
 
 <form action="" method="post" id="main-form">
     {% csrf_token %}
-    {% include 'admin/admin/_toolbar.html' %}
+    {% include admin.toolbarTemplate %}
 
     <section id="list" data-path="{{ request.getPath() }}">
         {{ table.render()|safe }}

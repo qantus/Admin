@@ -19,4 +19,17 @@ class AdminModule extends Module
         }
         return $this->dashboards;
     }
+
+    public function getMenu()
+    {
+        return [
+            'name' => $this->getName(),
+            'items' => [
+                [
+                    'name' => self::t('Settings'),
+                    'url' => 'admin:settings'
+                ],
+            ]
+        ];
+    }
 }

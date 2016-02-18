@@ -44,6 +44,10 @@ abstract class ModelAdmin
     /**
      * @var string
      */
+    public $toolbarTemplate = 'admin/admin/_toolbar.html';
+    /**
+     * @var string
+     */
     public $updateTemplate = 'admin/admin/update.html';
     /**
      * @var string
@@ -53,6 +57,10 @@ abstract class ModelAdmin
      * @var string
      */
     public $indexTemplate = 'admin/admin/_list.html';
+    /**
+     * @var string
+     */
+    public $listTemplate = 'admin/admin/list.html';
     /**
      * @var string
      */
@@ -152,7 +160,6 @@ abstract class ModelAdmin
     {
         return [];
     }
-
 
     /**
      * @param $column
