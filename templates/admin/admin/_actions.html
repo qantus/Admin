@@ -1,5 +1,5 @@
 {% if 'update' in admin.actionsList %}
-    <a href="{% url 'admin:update' moduleName adminClass record.pk %}">
+    <a href="{{ admin.getUpdateUrl(record.pk) }}">
         <i class="icon-edit"></i>
     </a>
 {% endif %}

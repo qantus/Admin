@@ -589,7 +589,9 @@ abstract class ModelAdmin
         $this->redirect('admin:list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
     }
 
-
+    /**
+     * @param array $data
+     */
     public function exportCsv(array $data = [])
     {
         $qs = $this->getQuerySet($this->getModel());
@@ -730,5 +732,22 @@ abstract class ModelAdmin
     public function getVerboseNameList()
     {
         return Text::mbUcfirst($this->getVerboseName());
+    }
+
+    public function getCreateUrl()
+    {
+        return Mindy::app()->urlManager->reverse('admin:create', [
+            'module' => $this->getModule()->getId(),
+            'adminClass' => $this->classNameShort()
+        ]);
+    }
+
+    public function getUpdateUrl($id)
+    {
+        return Mindy::app()->urlManager->reverse('admin:update', [
+            'module' => $this->getModule()->getId(),
+            'adminClass' => $this->classNameShort(),
+            'id' => $id
+        ]);
     }
 }

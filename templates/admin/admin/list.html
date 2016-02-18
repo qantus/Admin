@@ -6,7 +6,7 @@
     <h1>
         {{ admin.getVerboseNameList() }}
         {% if id %}
-        <a class="tiny ui button basic icon" href="{% url 'admin:update' moduleName adminClass id %}">
+        <a class="tiny ui button basic icon" href="{{ admin.getUpdateUrl(id) }}">
             <i class="icon write"></i>
             {{ t('Update', 'admin') }}
         </a>
