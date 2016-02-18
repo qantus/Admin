@@ -145,6 +145,7 @@ class AdminTable extends Table
             $columns = array_merge([
                 'check' => [
                     'class' => CheckColumn::className(),
+                    'admin' => $admin,
                     'length' => $this->count()
                 ],
                 'sorting' => [
@@ -155,6 +156,7 @@ class AdminTable extends Table
             $columns = array_merge([
                 'check' => [
                     'class' => CheckColumn::className(),
+                    'admin' => $admin,
                     'length' => $this->count()
                 ],
             ], $columns);
