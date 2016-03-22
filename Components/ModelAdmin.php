@@ -82,6 +82,10 @@ abstract class ModelAdmin
      */
     public $showPkColumn = true;
     /**
+     * @var bool enable pagination
+     */
+    public $enablePagination = true;
+    /**
      * @var string
      */
     protected $moduleName;
@@ -163,7 +167,7 @@ abstract class ModelAdmin
 
     /**
      * @param $column
-     * @param $model
+     * @param $model \Mindy\Orm\Model
      * @return mixed
      */
     public function getColumnValue($column, $model)
@@ -297,7 +301,9 @@ abstract class ModelAdmin
             'currentOrder' => $currentOrder,
             'columns' => $this->getColumns(),
             'linkColumn' => $this->linkColumn,
+            'extraParams' => $this->getExtraParams(),
             'actionsTemplate' => $this->actionsTemplate,
+            'enablePagination' => $this->enablePagination,
             'paginationConfig' => [
                 'pageSize' => $this->pageSize
             ]
@@ -311,6 +317,11 @@ abstract class ModelAdmin
             'sortingColumn' => $this->sortingColumn,
             'searchFields' => $this->getSearchFields()
         ];
+    }
+
+    public function getExtraParams()
+    {
+        return [];
     }
 
     /**
@@ -411,7 +422,7 @@ abstract class ModelAdmin
     public function update($pk, array $data = [], array $files = [])
     {
         $modelClass = $this->getModel();
-        $model = $modelClass::objects()->filter(['pk' => $pk])->get();
+        $model = $modelClass::objects()->get(['pk' => $pk]);
 
         if ($model === null) {
             $this->error(404);
@@ -423,6 +434,7 @@ abstract class ModelAdmin
         $this->initBreadcrumbs($model);
 
         $formClass = $this->getUpdateForm();
+
         /* @var $form \Mindy\Form\ModelForm */
         $form = new $formClass(array_merge($this->getUpdateFormParams(), [
             'model' => $model,

@@ -30,6 +30,10 @@ class AdminTable extends Table
      */
     public $sortingColumn;
     /**
+     * @var array
+     */
+    public $extraParams = [];
+    /**
      * @var bool
      */
     public $showPkColumn = true;
@@ -81,6 +85,7 @@ class AdminTable extends Table
         $moduleName = $this->moduleName;
 
         $rawColumns = $this->_dynamicColumns;
+        $extraParams = $this->extraParams;
 
         if ($this->linkColumn) {
             if (isset($rawColumns[$this->linkColumn])) {
@@ -96,7 +101,7 @@ class AdminTable extends Table
                     'html' => [
                         'align' => 'left'
                     ],
-                    'route' => function ($record) use ($moduleName, $adminClass) {
+                    'route' => function ($record) use ($moduleName, $adminClass, $extraParams) {
                         $urlManager = Mindy::app()->urlManager;
                         if (is_a($record, TreeModel::className())) {
                             if ($record->isLeaf() === false) {
@@ -104,7 +109,7 @@ class AdminTable extends Table
                                     'moduleName' => $moduleName,
                                     'adminClass' => $adminClass,
                                     'pk' => $record->pk
-                                ]);
+                                ]) . (empty($extraParams) === false ? '?' . http_build_query($extraParams) : '');
                             }
                         }
 
@@ -128,14 +133,14 @@ class AdminTable extends Table
                         'class' => 'td-id',
                         'align' => 'left'
                     ],
-                    'route' => function ($record) use ($moduleName, $adminClass) {
+                    'route' => function ($record) use ($moduleName, $adminClass, $extraParams) {
                         // 'admin:update' moduleName adminClass model.pk
                         // 'admin:list_nested' moduleName adminClass model.pk
                         return Mindy::app()->urlManager->reverse('admin:update', [
                             'moduleName' => $moduleName,
                             'adminClass' => $adminClass,
                             'pk' => $record->pk
-                        ]);
+                        ]) . (empty($extraParams) === false ? '?' . http_build_query($extraParams) : '');
                     }
                 ]
             ], $columns);
@@ -233,13 +238,14 @@ class AdminTable extends Table
 
     public function render()
     {
+        $pager = $this->getPager();
         return strtr($this->template, [
             '{html}' => $this->getHtmlAttributes(),
             '{caption}' => $this->renderCaption(),
             '{header}' => $this->renderHeader(),
             '{footer}' => $this->renderFooter(),
             '{body}' => $this->renderBody(),
-            '{pager}' => $this->getPager()->render('admin/admin/_pager.html')
+            '{pager}' => $pager ? $pager->render('admin/admin/_pager.html') : null
         ]);
     }
 }

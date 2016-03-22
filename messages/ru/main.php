@@ -1,6 +1,7 @@
 <?php
 
 return array(
+    'Failed to save settings' => 'Ошибка сохранения настроек',
     'Settings center' => 'Центр настроек',
     'Remove' => 'Удалить',
     'Show / hide sidebar' => 'Скрыть / показать боковую панель',

@@ -1,1 +1,11 @@
-{{ out|raw }}
+{% extends 'admin/base_print.html' %}
+
+{% block content %}
+    <div class="columns small-12">
+        <div class="base-block">
+            <h1>{{ t('Information about', 'admin') }} {{ admin.getVerboseName()|ucfirst }}</h1>
+
+            {% include "admin/admin/_info_table.html" %}
+        </div>
+    </div>
+{% endblock %}

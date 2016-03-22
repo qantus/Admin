@@ -2,13 +2,26 @@
 
 namespace Modules\Admin;
 
+use Mindy\Base\Mindy;
 use Mindy\Base\Module;
 use Mindy\Helper\Alias;
+use Modules\Admin\Library\AdminLibrary;
 
 class AdminModule extends Module
 {
+    /**
+     * @var array
+     */
     protected $dashboards = [];
 
+    public static function preConfigure()
+    {
+        Mindy::app()->template->addLibrary(new AdminLibrary());
+    }
+
+    /**
+     * @return array
+     */
     public function getDashboardClasses()
     {
         if (empty($this->dashboards)) {

@@ -1,8 +1,8 @@
 {% for item in apps %}
+    {% set first = item.items|first %}
     <li>
-        <span>
+        <div class="menu-item-container">
             {% if item.items %}
-                {% set first = item.items|first %}
                 <a class="module-name" href="{% if first.url %}{% url first.url|lower item.module first.adminClass %}{% else %}{% url 'admin:list' item.module first.adminClass %}{% endif %}">
             {% else %}
                 <span class="module-name">
@@ -17,7 +17,7 @@
             {% else %}
                 </a>
             {% endif %}
-        </span>
+        </div>
         {% if item.items and item.items|length > 1 %}
             <ul>
                 {% for child in item.items %}

@@ -48,7 +48,7 @@ class SettingsController extends BackendController
 
     public function actionIndex()
     {
-        $this->addBreadcrumb(CoreModule::t('Settings center'));
+        $this->addBreadcrumb($this->getModule()->t('Settings center'));
 
         $models = $this->reformatModels($this->getSettingsModels());
         $request = $this->getRequest();
@@ -60,8 +60,11 @@ class SettingsController extends BackendController
                     $success = false;
                 }
             }
-            $request->flash->success(CoreModule::t($success ? 'Settings saved successfully' : 'Settings save fail'));
-            $request->refresh();
+            if ($success) {
+                $request->flash->success($this->getModule()->t('Settings successfully saved'));
+            } else {
+                $request->flash->error($this->getModule()->t('Failed to save settings'));
+            }
         }
 
         echo $this->render('admin/settings.html', [
