@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]> <html class="no-js lt-ie9 lt-ie8 lt-ie7" lang="ru"> <![endif]-->
+<!--[if IE 7]> <html class="no-js lt-ie9 lt-ie8" lang="ru"> <![endif]-->
+<!--[if IE 8]> <html class="no-js lt-ie9" lang="ru"> <![endif]-->
+<!--[if gt IE 8]><!-->
+<html class="no-js" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="robots" content="noindex, nofollow"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width">
+    <meta name="fragment" content="!">
+    {%- if title or this.title -%}
+        <title>{% if this.title %}{% for title in this.title %}{{ title }}{% if not loop.last %} - {% endif %}{% endfor %}{% else %}{{ title }}{% endif %} - Mindy</title>
+    {%- endif -%}
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,600,700,300&subset=latin,cyrillic' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="/static_admin/dist/css/1.0.0.all.css"/>
+    <script type='text/javascript' src="/static_admin/dist/js/1.0.0.all.js"></script>
+    <script type='text/javascript' src="/static_admin/dist/ueditor107/ueditor.all.js"></script>
+    <script type='text/javascript' src="/static_admin/dist/ueditor107/lang/en/en.js"></script>
+</head>
+<body>
+<div id="wrapper-table">
+    <div class="overflow-wrapper">
+        <div class="webkit-fix-padding-td">
+            <section id="content" class="{% block content_class %}{% endblock %}">
+                <section class="content-wrap">
+                    <section class="heading">
+                        {% block heading %}{% endblock %}
+                    </section>
+
+                    {% block content %}{% endblock %}
+                </section>
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+</html>

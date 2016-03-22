@@ -44,6 +44,10 @@ abstract class ModelAdmin
     /**
      * @var string
      */
+    public $toolbarTemplate = 'admin/admin/_toolbar.html';
+    /**
+     * @var string
+     */
     public $updateTemplate = 'admin/admin/update.html';
     /**
      * @var string
@@ -53,6 +57,10 @@ abstract class ModelAdmin
      * @var string
      */
     public $indexTemplate = 'admin/admin/_list.html';
+    /**
+     * @var string
+     */
+    public $listTemplate = 'admin/admin/list.html';
     /**
      * @var string
      */
@@ -73,6 +81,10 @@ abstract class ModelAdmin
      * @var bool
      */
     public $showPkColumn = true;
+    /**
+     * @var bool enable pagination
+     */
+    public $enablePagination = true;
     /**
      * @var string
      */
@@ -153,10 +165,9 @@ abstract class ModelAdmin
         return [];
     }
 
-
     /**
      * @param $column
-     * @param $model
+     * @param $model \Mindy\Orm\Model
      * @return mixed
      */
     public function getColumnValue($column, $model)
@@ -290,7 +301,9 @@ abstract class ModelAdmin
             'currentOrder' => $currentOrder,
             'columns' => $this->getColumns(),
             'linkColumn' => $this->linkColumn,
+            'extraParams' => $this->getExtraParams(),
             'actionsTemplate' => $this->actionsTemplate,
+            'enablePagination' => $this->enablePagination,
             'paginationConfig' => [
                 'pageSize' => $this->pageSize
             ]
@@ -304,6 +317,11 @@ abstract class ModelAdmin
             'sortingColumn' => $this->sortingColumn,
             'searchFields' => $this->getSearchFields()
         ];
+    }
+
+    public function getExtraParams()
+    {
+        return [];
     }
 
     /**
@@ -404,7 +422,7 @@ abstract class ModelAdmin
     public function update($pk, array $data = [], array $files = [])
     {
         $modelClass = $this->getModel();
-        $model = $modelClass::objects()->filter(['pk' => $pk])->get();
+        $model = $modelClass::objects()->get(['pk' => $pk]);
 
         if ($model === null) {
             $this->error(404);
@@ -416,6 +434,7 @@ abstract class ModelAdmin
         $this->initBreadcrumbs($model);
 
         $formClass = $this->getUpdateForm();
+
         /* @var $form \Mindy\Form\ModelForm */
         $form = new $formClass(array_merge($this->getUpdateFormParams(), [
             'model' => $model,
@@ -582,7 +601,9 @@ abstract class ModelAdmin
         $this->redirect('admin:list', ['module' => $this->getModel()->getModuleName(), 'adminClass' => $this->classNameShort()]);
     }
 
-
+    /**
+     * @param array $data
+     */
     public function exportCsv(array $data = [])
     {
         $qs = $this->getQuerySet($this->getModel());
@@ -723,5 +744,22 @@ abstract class ModelAdmin
     public function getVerboseNameList()
     {
         return Text::mbUcfirst($this->getVerboseName());
+    }
+
+    public function getCreateUrl()
+    {
+        return Mindy::app()->urlManager->reverse('admin:create', [
+            'module' => $this->getModule()->getId(),
+            'adminClass' => $this->classNameShort()
+        ]);
+    }
+
+    public function getUpdateUrl($id)
+    {
+        return Mindy::app()->urlManager->reverse('admin:update', [
+            'module' => $this->getModule()->getId(),
+            'adminClass' => $this->classNameShort(),
+            'id' => $id
+        ]);
     }
 }

@@ -12,6 +12,14 @@ use Modules\Core\Tables\UserLogTable;
 
 class AdminController extends BackendController
 {
+    public function redirectNext()
+    {
+        $next = $this->getRequest()->get->get('_next');
+        if (!empty($next)) {
+            $this->getRequest()->redirect($next);
+        }
+    }
+
     /**
      * @return string
      */
@@ -79,14 +87,15 @@ class AdminController extends BackendController
         if ($this->getRequest()->isAjax) {
             echo $out;
         } else {
-            echo $this->render('admin/admin/list.html', array_merge(['adminClass' => $adminClass], [
+            echo $this->render($admin->listTemplate, [
+                'adminClass' => $adminClass,
                 'module' => $admin->getModule(),
                 'moduleName' => $module,
                 'modelClass' => $admin->getModel(),
                 'out' => $out,
                 'admin' => $admin,
                 'id' => isset($_GET['id']) ? $_GET['id'] : null
-            ]));
+            ]);
         }
     }
 

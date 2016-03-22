@@ -18,7 +18,7 @@ abstract class Dashboard
 
     public function __toString()
     {
-        return (string)$this->renderTemplate($this->getTemplate(), $this->getData());
+        return (string)$this->render();
     }
 
     public function getData()
@@ -30,6 +30,6 @@ abstract class Dashboard
 
     public function render()
     {
-        echo $this->renderTemplate($this->getTemplate(), $this->getData());
+        return $this->renderTemplate($this->getTemplate(), $this->getData());
     }
 }

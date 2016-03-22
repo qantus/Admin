@@ -21,9 +21,49 @@
 
 <form action="" method="post" id="main-form">
     {% csrf_token %}
-    {% include 'admin/admin/_toolbar.html' %}
+    {% include admin.toolbarTemplate %}
 
     <section id="list" data-path="{{ request.getPath() }}">
         {{ table.render()|safe }}
     </section>
 </form>
+
+<script type="text/javascript">
+    $("#table-main.sortingColumn").find("tbody").sortable({
+        axis: 'y',
+        placeholder: "highlight",
+        helper: function (e, ui) {
+            ui.children().each(function () {
+                var $this = $(this);
+                $this.width($this.width());
+            });
+            return ui;
+        },
+        update: function (event, ui) {
+            var $to = $(ui.item),
+                    $prev = $to.prev(),
+                    $next = $to.next();
+
+            var data = $(this).sortable('toArray', {
+                attribute: 'data-pk'
+            });
+
+            $.ajax({
+                data: {
+                    models: data,
+                    pk: $to.data('pk'),
+                    insertAfter: $prev.data('pk'),
+                    insertBefore: $next.data('pk'),
+                    action: 'sorting'
+                },
+                type: 'POST',
+                url: '',
+                success: function (data) {
+                    $('#main-form').replaceWith(data);
+                }
+            });
+        }
+    }).disableSelection();
+
+    $('table').checkboxes('range', true);
+</script>

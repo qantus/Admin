@@ -3,7 +3,7 @@
     <tr>
         <td class="toolbar-actions-td">
             {% if admin.getCanCreate() %}
-            <a href="{% url 'admin:create' moduleName adminClass %}" class="create ui button icon primary tiny">
+            <a href="{{ admin.getCreateUrl() }}" class="create ui button icon primary tiny">
                 <i class="icon add square"></i>
                 {{ t('Create', 'admin') }}
             </a>
