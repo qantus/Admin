@@ -668,10 +668,7 @@ abstract class ModelAdmin
         /**
          * Pager-independent sorting
          */
-        $oldPositions = [];
-        foreach ($models as $pk) {
-            $oldPositions[] = $modelClass::objects()->filter(['pk' => $pk])->get()->{$this->sortingColumn};
-        }
+        $oldPositions = $modelClass::objects()->filter(['pk__in' => $models])->valuesList([$this->sortingColumn], true);
         asort($oldPositions);
         foreach ($models as $pk) {
             $newPosition = array_shift($oldPositions);
